@@ -1,0 +1,1 @@
+pip3 install dist/HDPython-0.0.1.tar.gz
