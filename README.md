@@ -13,34 +13,6 @@ HDPython is a library that allows one to write Python code and convert it to VHD
 
 ## Getting Started
 
-### Video Documentation
-
-
-
-
-
-[HDPython-01-first-test-bench](https://www.youtube.com/watch?v=Ekk4v64VJQY)
-
-
-
-
-
-
-[HDPython_02_slicing](https://www.youtube.com/watch?v=WvogH3ap3OE)
-
-
-
-
-[HDPython-03-variables-and-signal](https://www.youtube.com/watch?v=cagF5hIlxS4)
-
-
-
-[HDPython-04-Records](https://www.youtube.com/watch?v=cBkStCMcUVM)
-
-
-
-[HDPython-05-Classes](https://www.youtube.com/watch?v=32gUk7DFUFE)
-
 
 ### Example1
 
