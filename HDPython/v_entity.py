@@ -9,6 +9,8 @@ from HDPython.v_symbol import *
 from HDPython.v_entity_list import *
 from HDPython.HDPython_AST import *
 from HDPython.object_factory import add_constructor
+from HDPython.hdl_exporter import HDL_Export
+
 
 from typing import Sequence, TypeVar
 T = TypeVar('T', bound='Copyable')
@@ -16,7 +18,7 @@ T = TypeVar('T', bound='Copyable')
 
 
 
-
+@HDL_Export("process")
 def process():
     def decorator_processd(func):
         @functools.wraps(func)
@@ -33,7 +35,7 @@ def process():
     return decorator_processd
 
 
-
+@HDL_Export("timed")
 def timed():
     def decorator_timed(func):
         @functools.wraps(func)
@@ -71,8 +73,7 @@ def addPullsPushes_from_closure(Pull_list, Push_list, closure):
             y._sim_set_push_pull(Pull_list, Push_list)
             
 
-
-
+@HDL_Export("combinational")
 def combinational():
     def decorator_combinational(func):
         @functools.wraps(func)
@@ -103,7 +104,7 @@ def run_list(functionList):
     for x in functionList:
         x()
 
-
+@HDL_Export("rising_edge")
 def rising_edge(symbol):
     def decorator_rising_edge(func):
         Pull_list = []

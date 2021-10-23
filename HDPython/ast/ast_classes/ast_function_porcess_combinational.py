@@ -1,6 +1,6 @@
 from HDPython.ast.ast_classes.ast_base import v_ast_base, add_class
 from HDPython.lib_enums import getDefaultVarSig, setDefaultVarSig,varSig
-
+from HDPython.hdl_exporter import Add_Export_Function
 
 
 class porcess_combinational(v_ast_base):
@@ -39,3 +39,4 @@ def body_unfold_porcess_body_combinational(astParser,Node):
 
 add_class("combinational", body_unfold_porcess_body_combinational)
 
+Add_Export_Function("combinational", body_unfold_porcess_body_combinational)

@@ -5,6 +5,9 @@ from HDPython.ast.ast_classes.ast_function_process import  body_unfold_porcess
 
 from HDPython.base_helpers import join_str
 
+from HDPython.hdl_exporter import Add_Export_Function
+
+
 class v_process_body_Def(v_ast_base):
     def __init__(self,BodyList,name,LocalVar,dec=None):
         self.BodyList=BodyList
@@ -114,3 +117,4 @@ def body_unfold_porcess_body(astParser,Node):
 
 
 add_class("rising_edge",body_unfold_porcess_body)
+Add_Export_Function("rising_edge", body_unfold_porcess_body)

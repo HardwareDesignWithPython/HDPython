@@ -1,6 +1,8 @@
 from HDPython.ast.ast_classes.ast_base import v_ast_base, add_class, add_ast_function_call
 from HDPython.lib_enums import getDefaultVarSig, setDefaultVarSig,varSig
 from HDPython.ast.ast_classes.ast_noop import v_noop
+from HDPython.hdl_exporter import Add_Export_Function
+
 
 class architecure_body(v_ast_base):
     def __init__(self, Name, BodyList):
@@ -41,7 +43,7 @@ def body_unfold_architecture_body(astParser,Node):
 
     return architecure_body(Node.name, ret)
 
-
+Add_Export_Function("architecture",body_unfold_architecture_body)
 add_class("architecture",body_unfold_architecture_body)
 
 def  body_end_architecture(astParser,args,keywords=None):

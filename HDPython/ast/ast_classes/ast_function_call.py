@@ -66,40 +66,66 @@ def body_unfold_call_local_func(astParser,Node):
     return ret
 
 
+def isFreeFunction(Node):
+    return hasattr(Node.func, 'id')
+
+def isSymbolFunction(astParser, Node):
+    return Node.func.id in astParser._unfold_symbol_fun_arg
+
+def isLocalFunction(astParser, Node):
+    return Node.func.id in astParser.local_function
+
+
+def isMemberFunction(Node):
+    return  hasattr(Node.func, 'value')
+
+
+def isModule(obj):
+    return type(obj).__name__ == "module"
+
+def body_unfold_member_function_module(astParser,Node):
+    return astParser._unfold_symbol_fun_arg[Node.func.attr](astParser, Node.args,Node.keywords)
+
+def body_unfold_member_function(astParser,Node):
+    obj = astParser.Unfold_body(Node.func.value)
+    if isModule(obj):
+        return body_unfold_member_function_module(astParser,Node)
+    #obj = astParser.getInstantByName(Node.func.value.id)
+    memFunc = Node.func.attr
+    f = getattr(obj,memFunc)
+
+    args = list()
+    for x in Node.args:
+        args.append(astParser.Unfold_body(x))
+        
+    gf_type = isFunction()
+    set_isFunction(True)
+    if len(args) == 0:
+        r = f()  # find out how to forward args 
+    elif len(Node.args) == 1:
+        r = f(args[0])  # find out how to forward args
+    elif len(Node.args) == 2:
+        r = f(args[0],args[1])  # find out how to forward args
+    set_isFunction(gf_type)
+
+    r = v_copy(to_v_object(r))
+    vhdl =hdl.impl_function_call(obj, memFunc,[obj]+ args,astParser)
+    r.set_vhdl_name(vhdl)
+    ret = v_call(memFunc,r, vhdl)
+    return ret
+
 def body_unfold_call(astParser,Node):
-    if hasattr(Node.func, 'id'):
-        if Node.func.id in astParser._unfold_symbol_fun_arg:
+    if isFreeFunction(Node):
+        if isSymbolFunction(astParser, Node):
             return astParser._unfold_symbol_fun_arg[Node.func.id](astParser, Node.args,Node.keywords)
-        if Node.func.id in astParser.local_function:
+        if isLocalFunction(astParser, Node):
             return body_unfold_call_local_func( astParser ,Node)
         
         raise Exception("unknown function")
 
-    if hasattr(Node.func, 'value'):
-        obj = astParser.Unfold_body(Node.func.value)
-        #obj = astParser.getInstantByName(Node.func.value.id)
-        memFunc = Node.func.attr
-        f = getattr(obj,memFunc)
+    if isMemberFunction(Node):
+        return body_unfold_member_function(astParser,Node)
 
-        args = list()
-        for x in Node.args:
-            args.append(astParser.Unfold_body(x))
-        
-        gf_type = isFunction()
-        set_isFunction(True)
-        if len(args) == 0:
-            r = f()  # find out how to forward args 
-        elif len(Node.args) == 1:
-            r = f(args[0])  # find out how to forward args
-        elif len(Node.args) == 2:
-            r = f(args[0],args[1])  # find out how to forward args
-        set_isFunction(gf_type)
-
-        r = v_copy(to_v_object(r))
-        vhdl =hdl.impl_function_call(obj, memFunc,[obj]+ args,astParser)
-        r.set_vhdl_name(vhdl)
-        ret = v_call(memFunc,r, vhdl)
-        return ret
 
     if hasattr(Node.func, 'func'):
         return body_unfold_call(astParser,Node.func)

@@ -12,16 +12,20 @@ import  functools
 import  HDPython.hdl_converter as  hdl
 from HDPython.object_factory import add_constructor
 from HDPython.type_info import typeInfo
-
+from HDPython.hdl_exporter import HDL_Export
 from typing import Sequence, TypeVar
 
 
 T = TypeVar('T', bound='Copyable')
 
+
+@HDL_Export("architecture")
 def architecture(func):
     def wrap(self,*args, **kwargs): 
         func(self,*args, **kwargs) 
     return wrap
+
+    
 
 def end_architecture():
     add_symbols_to_entiy("architecture")

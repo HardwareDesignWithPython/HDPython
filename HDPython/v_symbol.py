@@ -277,6 +277,9 @@ class v_symbol(HDPython_base):
     def __add__(self,rhs):
         
         return value(self) + value(rhs) 
+    
+    def __radd__(self, other):
+        return value(self) + value(other) 
 
     def __sub__(self,rhs):
         

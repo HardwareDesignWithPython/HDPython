@@ -1,6 +1,6 @@
 from HDPython.ast.ast_classes.ast_base import v_ast_base, add_class
 from HDPython.lib_enums import getDefaultVarSig, setDefaultVarSig,varSig
-
+from HDPython.hdl_exporter import Add_Export_Function
 
 class v_process_Def(v_ast_base):
     def __init__(self,BodyList,name,dec=None):
@@ -46,4 +46,5 @@ def body_unfold_porcess(astParser,Node, Body = None):
 
 
 add_class("process", body_unfold_porcess)
+Add_Export_Function("process", body_unfold_porcess)
 

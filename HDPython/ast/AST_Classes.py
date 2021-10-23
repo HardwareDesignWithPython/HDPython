@@ -16,6 +16,9 @@ from HDPython.ast.ast_classes.ast_noop import v_noop
 
 
 
+
+
+
 def unfold_Str(astParser, strNode):
     return strNode.s
 def unfold_num(astParser, NumNode):
@@ -192,6 +195,9 @@ def handle_rising_edge(astParser, symb,keyword=None):
         l.append(s)
 
     return v_decorator("rising_edge", l )
+
+
+
 
 
 def handle_v_create(astParser, symb):

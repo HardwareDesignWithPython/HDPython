@@ -27,10 +27,21 @@ def check_if_subclasses(BaseNames,baseclasses):
             return True
     return False
 
+
+def try_get(obj, attrs):
+    try:
+        for a in attrs:
+            if hasattr(obj,a):
+                return getattr(obj,a)
+            
+        
+    except:
+        return None
+
 def get_subclasses(astList,BaseNames):
     for astObj in astList:
         if  type(astObj).__name__ == 'ClassDef':
-            baseclasses = [x.id  for x in astObj.bases]
+            baseclasses = [try_get(x, ["id","attr"] )  for x in astObj.bases]
             if  check_if_subclasses(BaseNames,baseclasses):
                 yield astObj
 

@@ -38,6 +38,41 @@ class v_funDef(v_ast_base):
 
 
 
+def get_name(Node):
+    if hasattr(Node, "attr"):
+        return Node.attr
+    if hasattr(Node, "func"):
+        if hasattr(Node.func, "attr"):
+            return Node.func.attr
+    return ""
+
+
+
+
+
+def get_function_object(astParser,Node):
+    ret = []
+    for x in Node:
+        obj = None
+        
+        if hasattr(x, "value"):
+            obj= astParser.Unfold_body(x.value)
+        elif hasattr(x, "func"):
+            if hasattr(x.func, "value"):
+                obj =  astParser.Unfold_body(x.func.value)
+            elif hasattr(x.func, "id"):
+                
+                ret.append( astParser.local_function[x.func.id])
+        elif hasattr(x, "id"):
+            obj = astParser.Unfold_body(x)
+            ret.append( astParser.local_function[obj])
+        elif hasattr(x, "func"):
+            obj = astParser.Unfold_body(x)
+            ret.append( astParser.local_function[obj])
+        if hasattr(obj, get_name(x)):
+            ret.append( getattr(obj, get_name(x)))
+    return ret
+
 def body_unfold_functionDef(astParser,Node):
     astParser.FuncArgs.append(
         {
@@ -46,23 +81,9 @@ def body_unfold_functionDef(astParser,Node):
             "ScopeType": ""
         }
     )
-    if isDecoratorName(Node.decorator_list, "process" ):
-        return astParser._Unfold_body["process"](astParser,Node)
-        
-    if  isDecoratorName(Node.decorator_list, "rising_edge" ):
-        return astParser._Unfold_body["rising_edge"](astParser,Node)
-
-    if  isDecoratorName(Node.decorator_list, "timed" ):
-        return astParser._Unfold_body["timed"](astParser,Node)
-        
-    if isDecoratorName(Node.decorator_list, "combinational" ):
-        return astParser._Unfold_body["combinational"](astParser,Node) 
-        
-    if isDecoratorName(Node.decorator_list, "architecture" ):
-        return astParser._Unfold_body["architecture"](astParser,Node) 
-    
-    if isDecoratorName(Node.decorator_list, "hdl_export" ):
-        decorator_l = []
+    obj = get_function_object(astParser,Node.decorator_list)
+    if len(obj) != 0:
+        return obj[0].__hdl_export__(astParser,Node)
     else:
         decorator_l = astParser.Unfold_body(Node.decorator_list)
     

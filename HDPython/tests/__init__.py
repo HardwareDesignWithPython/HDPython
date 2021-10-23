@@ -14,3 +14,5 @@ from HDPython.tests import TX_Trigger_bit_readout as ct1112
 
 from HDPython.tests import test_axi_fifo as ct2
 from HDPython.tests import command_reader as command_reader1
+
+from HDPython.tests import edge_detection as edge_detection1
