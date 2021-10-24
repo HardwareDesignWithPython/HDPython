@@ -53,7 +53,7 @@ class v_record_converter(v_class_converter):
             line = "self  " + assign +" data_IO;"
 
         type_name  = self.get_type_simple(obj)
-        args = "signal clk: in std_logic; " + varSig_str+ "self : inout " + type_name + "; signal data_IO : " + inout + " " + type_name
+        args =  varSig_str+ "self : inout " + type_name + "; signal data_IO : " + inout + " " + type_name
 
         ret = v_procedure(
             name=name,

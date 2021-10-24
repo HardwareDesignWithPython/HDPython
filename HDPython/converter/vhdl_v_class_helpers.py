@@ -8,7 +8,7 @@ from HDPython.object_factory import impl_constructor
 
 
 def _get_connector(symb):
-    if symb._Inout == InOut_t.Master_t:
+    if symb._Inout == InOut_t.Master_t or symb._Inout == InOut_t.output_t:
         n_connector = symb.__receiver__[-1]
     else :
         n_connector = symb.__Driver__
@@ -38,6 +38,13 @@ def append_hdl_name(name, suffix):
     
     return ret
     
+def is_singal_to_signal_conection(symb):
+    n_connector = _get_connector(symb)
+    if n_connector is None:
+        return False
+    return n_connector._varSigConst == varSig.signal_t and symb._varSigConst == varSig.signal_t
+
+
 class vhdl__Pull_Push():
     def __init__(self,obj, inout, clk):
         self.obj = obj
@@ -58,12 +65,20 @@ class vhdl__Pull_Push():
         for x in self.obj.getMember( self.Inout):
             n_connector = _get_connector( x["symbol"])
 
+            if self.Inout == InOut_t.output_t and is_singal_to_signal_conection( x["symbol"] ):
+                continue
 
             ys =n_connector.__hdl_converter__.extract_conversion_types(
                     n_connector,
                     exclude_class_type= v_classType_t.transition_t,
                     filter_inout=self.Inout
                 )
+            ys +=n_connector.__hdl_converter__.extract_conversion_types(
+                    n_connector,
+                    exclude_class_type= v_classType_t.transition_t,
+                    filter_inout=InOut_t.Internal_t 
+                )
+            x["symbol"].__Driver_Is_SubConnection__ = True
             for y in ys:
                 content.append(x["name"]+" => "+y["symbol"].get_vhdl_name())
 
@@ -82,8 +97,8 @@ class vhdl__Pull_Push():
         if  not hdl.Has_pushpull_function(self.obj, pushpull):
             return ""
 
-        content  = self.get_clock_connection()
-        content += self.get_selfHandles()
+        #content  = self.get_clock_connection()
+        content = self.get_selfHandles()
         content += self.getConnections()
 
 
@@ -241,7 +256,11 @@ class getMemberArgs():
         members = self.obj.getMember(self.InOut_Filter)
 
         for i in members:
+            if self.PushPull == "push" and  is_singal_to_signal_conection( i["symbol"] ):
+                continue
             n_connector = _get_connector(i["symbol"])
+
+
             xs = hdl.extract_conversion_types(
                     i["symbol"],
                     exclude_class_type= v_classType_t.transition_t,
@@ -251,7 +270,7 @@ class getMemberArgs():
             for x in xs:
 
                 varsig = " "
-                if n_connector._varSigConst == varSig.signal_t :
+                if n_connector and n_connector._varSigConst == varSig.signal_t :
                     varsig = " signal "
                 type_name  = hdl.get_type_simple(x["symbol"])
                 members_args.append(varsig + i["name"] + " : " + self.InOut + " "  + type_name+self.suffix)
@@ -288,7 +307,7 @@ class getConnecting_procedure_vector():
         if "push" in self.PushPull :
             inout = " out "
 
-        argumentList =  "signal clk  : in std_logic; " 
+        argumentList =  "" 
         argumentList +=  self.obj.__hdl_converter__.getMemberArgs(
             self.obj,
             self.InOut_Filter,
@@ -344,10 +363,12 @@ class getConnecting_procedure_vector():
         content += self.get_internal_connections()
 
         members = self.obj.getMember(self.InOut_Filter)
-        args = "clk => clk, " 
-        args += join_str(content + [
+
+        args = join_str(content + [
                 str(x["name"]) + " => " + str(x["name"]+"(i)")
                 for x in members
+                if not( self.PushPull == "push" and is_singal_to_signal_conection( x["symbol"] ))
+                
             ],
             Delimeter= ", ",
             IgnoreIfEmpty=True

@@ -464,8 +464,8 @@ class HDPython_base(HDPython_base0):
     def set_varSigConst(self, varSigConst):
         raise Exception("not implemented for class: ", type(self).__name__)
 
-    def get_vhdl_name(self,Inout):
-        return None
+    def get_vhdl_name(self,Inout=None):
+        return str(self)
         
     def isInOutType(self,Inout):
         return False

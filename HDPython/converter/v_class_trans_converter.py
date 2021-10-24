@@ -69,20 +69,16 @@ class v_class_trans_converter(v_class_converter):
             
     def getConnecting_procedure(self,obj, InOut_Filter,PushPull, procedureName=None,varSig_=varSig.variable_t):
         
-        beforeConnecting, AfterConnecting, inout = obj.__hdl_converter__.get_before_after_conection(
-            obj,
-            InOut_Filter, 
-            PushPull
-        )
 
+        inout = " out " if InOut_Filter == InOut_t.output_t  else " in "
 
         classType = obj.getType(InOut_Filter)
         ClassName="IO_data"
         varSig__str = "" if varSig_ == varSig.variable_t else " signal "
         type_name  = self.get_type_simple(obj)
         
-        argumentList = "signal clk : in std_logic; "
-        argumentList += varSig__str + " self : inout " + type_name
+   
+        argumentList = varSig__str + " self : inout " + type_name
         argumentList += " ; signal " + ClassName +" : " + inout+ classType
 
 
@@ -101,23 +97,13 @@ class v_class_trans_converter(v_class_converter):
         )
 
        
-        body='''
-{beforeConnecting}
--- Start Connecting
-{Connecting}
--- End Connecting
-{AfterConnecting}
-        '''.format(
-            beforeConnecting=beforeConnecting,
-            Connecting = Connecting,
-            AfterConnecting=AfterConnecting
-        )
+
 
         ret        = v_procedure(
             name=procedureName, 
             argumentList=argumentList , 
-            body=body,
-            IsEmpty=len(body.strip()) == 0,
+            body=Connecting,
+            IsEmpty=len(Connecting.strip()) == 0,
             isFreeFunction=True
             )
         

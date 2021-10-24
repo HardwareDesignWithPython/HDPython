@@ -7,18 +7,25 @@ from HDPython.test_handler import add_test
 
 
 class Var_sig_class(v_class_master):
-    def __init__(self):
+    def __init__(self, data, data_out):
         super().__init__()
         self.sTest1 = v_signal(v_slv(32))
         self.sTest2 = v_signal(v_slv(32))
         self.sTest3 = v_signal(v_slv(32))
+        self.sTest4 = port_in(data)
+        self.sTest4 << data
+        self.sTest5 = port_out(data_out)
+        data_out << self.sTest5
+        
         self.vTest1 = v_variable(v_slv(32))
         self.vTest2 = v_variable(v_slv(32))
         self.vTest3 = v_variable(v_slv(32))
 
+
     def f1(self):
         self.vTest1 << 5
         self.sTest1 << 4
+        self.sTest5 << self.sTest5 + 1
 
     def f2(self, x):
         self.vTest2 << x
@@ -33,8 +40,9 @@ class var_sig_impl(v_entity):
 
     @architecture
     def architecture(self):
-        vs_clas = Var_sig_class()
         data = v_slv(32)
+        data_o  = v_slv(32)
+        vs_clas = Var_sig_class(data,data_o)
         @rising_edge(self.clk)
         def proc():
             vs_clas.sTest3 << data
@@ -78,7 +86,7 @@ def var_sig_tb_2vhdl(OutputPath, f= None):
     tb1 = var_sig_tb()
     return tb1
 
-def test_RamHandler_2vhdl():
+def var_sig_tb_2vhdl_2vhdl():
     return var_sig_tb_2vhdl("tests/var_sig_class/") 
 
-#add_test("var_sig_tb_2vhdl", test_RamHandler_2vhdl)
+add_test("var_sig_tb_2vhdl", var_sig_tb_2vhdl_2vhdl)

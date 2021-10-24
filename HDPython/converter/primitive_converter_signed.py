@@ -25,8 +25,7 @@ class v_signed_converter(v_symbol_converter):
             astParser.add_write(obj)
         obj._add_output()
         target = str(obj)
-        if context_str == 'function' and obj.isVarSigType(varSig.signal_t):
-            target = target.replace(".","_")
+
 
 
         if issubclass(type(rhs), HDPython_base0) and str(obj.__Driver__) != 'process' and str(obj.__Driver__) != 'function':

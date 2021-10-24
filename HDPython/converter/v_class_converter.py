@@ -298,7 +298,31 @@ class v_class_converter(hdl_converter_base):
         
 
 
+    def impl_enter_rising_edge(self, obj):
+        if not obj.__hdl_converter__.getBody_onPull(obj).strip():
+            return ""
+        func_arg = {
+            "name" : "self",
+            "symbol" : obj
+        }
+        arg = str(obj)
+        argument = hdl.impl_function_argument(obj , func_arg, arg)
+        ret = join_str(argument,start="enter_rising_edge(", end=");\n",IgnoreIfEmpty=True)
+        #ret = "enter_rising_edge(" + argument + ");"
+        return ret
 
+    def impl_exit_rising_edge(self, obj):
+        if not obj.__hdl_converter__.getBody_onPush(obj).strip():
+            return ""
+        func_arg = {
+            "name" : "self",
+            "symbol" : obj
+        }
+        arg = str(obj)
+        argument = hdl.impl_function_argument(obj , func_arg, arg)
+        ret = join_str(argument,start="exit_rising_edge(", end=");\n",IgnoreIfEmpty=True)
+        
+        return ret
 
         
 
@@ -328,31 +352,17 @@ class v_class_converter(hdl_converter_base):
         return ""
 
 
-    def get_before_after_conection(self, obj, InOut_Filter, PushPull):
-        beforeConnecting = ""
-        AfterConnecting = ""
-        
+    def get_before_after_conection(self, obj, PushPull):
+        ret  = ""
         if  "push" in PushPull:
-            inout = " out "
-            beforeConnecting_comb = obj.__hdl_converter__.getBody_onPush_comb(obj)
-            beforeConnecting = obj.__hdl_converter__.getBody_onPush(obj)
-            if beforeConnecting.strip():
-                beforeConnecting =  "  if rising_edge(clk) then\n" + beforeConnecting + "  end if;"
+            ret = obj.__hdl_converter__.getBody_onPush(obj).strip()
 
-            if beforeConnecting_comb.strip():
-                beforeConnecting +="\n"+beforeConnecting_comb
 
         else:
-            inout = " in "
-            AfterConnecting_comb = obj.__hdl_converter__.getBody_onPull_comb(obj)
-            AfterConnecting = obj.__hdl_converter__.getBody_onPull(obj)
-            if AfterConnecting.strip():
-                AfterConnecting =  "  if rising_edge(clk) then\n" + AfterConnecting + "  end if;"
-            if AfterConnecting_comb.strip():
-                AfterConnecting = AfterConnecting_comb + "\n" +AfterConnecting
-            
-        return beforeConnecting, AfterConnecting, inout
+            ret = obj.__hdl_converter__.getBody_onPull(obj).strip()
 
+            
+        return ret
 
     def def_packet_body(self,obj, name,parent):
         if issubclass(type(parent),v_class):
@@ -549,7 +559,7 @@ class v_class_converter(hdl_converter_base):
                 filter_inout=InOut_Filter)
             for y in ys:
 
-                ret.append(PushPull+"(clk, self." + x["name"]+", "+PushPullPrefix + x["name"] +");")
+                ret.append(PushPull+"(self." + x["name"]+", "+PushPullPrefix + x["name"] +");")
         return ret      
          
  
@@ -703,7 +713,7 @@ class v_class_converter(hdl_converter_base):
 
     def to_arglist_self(self,obj, name,parent,element, withDefault = False, astParser=None):
         ret = []
-        inoutstr =  " in " # fixme 
+        inoutstr =  " inout " # fixme 
         varSignal = " Signal "
 
         if element["symbol"]._varSigConst == varSig.variable_t:
@@ -754,14 +764,7 @@ class v_class_converter(hdl_converter_base):
                     withDefault = withDefault, 
                     astParser=astParser
                 )
-            ret += self.to_arglist_signal(
-                    obj, 
-                    name,
-                    parent,
-                    element=x, 
-                    withDefault = withDefault, 
-                    astParser=astParser
-                )
+
 
 
         r =join_str(ret,Delimeter="; ",IgnoreIfEmpty=True)

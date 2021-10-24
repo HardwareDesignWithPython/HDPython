@@ -208,8 +208,11 @@ def impl_process_push(obj,clk):
     return obj.__hdl_converter__.impl_process_push(obj,clk)
 
 
+def impl_enter_rising_edge(obj):
+    return obj.__hdl_converter__.impl_enter_rising_edge(obj)
 
-
+def impl_exit_rising_edge(obj):
+    return obj.__hdl_converter__.impl_exit_rising_edge(obj)
 
 def get_assiment_op(obj):
     return obj.__hdl_converter__.get_assiment_op(obj)

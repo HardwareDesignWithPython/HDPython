@@ -8,15 +8,15 @@ use ieee.std_logic_unsigned.all;
 
 
 package HDPython_core is 
-    procedure push_01(signal clk : in std_logic; self : inout std_logic ; signal data : out std_logic) ;
-    procedure pull_01(signal clk : in std_logic; self : inout std_logic ; signal data : in std_logic) ;
-    procedure push_01(signal clk : in std_logic; self : inout std_logic_vector ; signal data : out std_logic_vector) ;
-    procedure pull_01(signal clk : in std_logic; self : inout std_logic_vector ; signal data  : in std_logic_vector) ;
+    procedure push_01(self : inout std_logic ; signal data : out std_logic) ;
+    procedure pull_01(self : inout std_logic ; signal data : in std_logic) ;
+    procedure push_01(self : inout std_logic_vector ; signal data : out std_logic_vector) ;
+    procedure pull_01(self : inout std_logic_vector ; signal data  : in std_logic_vector) ;
 
-    procedure push_11(signal clk : in std_logic; signal self : inout std_logic ; signal data : out std_logic) ;
-    procedure pull_11(signal clk : in std_logic; signal self : inout std_logic ; signal data : in std_logic) ;
-    procedure push_11(signal clk : in std_logic; signal self : inout std_logic_vector ; signal data : out std_logic_vector) ;
-    procedure pull_11(signal clk : in std_logic; signal self : inout std_logic_vector ; signal data  : in std_logic_vector) ;
+    procedure push_11(signal self : inout std_logic ; signal data : out std_logic) ;
+    procedure pull_11(signal self : inout std_logic ; signal data : in std_logic) ;
+    procedure push_11(signal self : inout std_logic_vector ; signal data : out std_logic_vector) ;
+    procedure pull_11(signal self : inout std_logic_vector ; signal data  : in std_logic_vector) ;
 
 
     function ah_min(lhs : integer; rhs : integer) return integer;
@@ -42,22 +42,22 @@ end HDPython_core;
 
 
 package body HDPython_core is
-    procedure push_01(signal clk: in std_logic; self : inout std_logic ; signal data : out std_logic) is 
+    procedure push_01(self : inout std_logic ; signal data : out std_logic) is 
     begin 
         data <= self ;
     end procedure;
 
-    procedure pull_01(signal clk: in std_logic; self : inout std_logic ; signal data : in std_logic) is 
+    procedure pull_01(self : inout std_logic ; signal data : in std_logic) is 
     begin 
         self := data;
     end procedure;
 
-    procedure push_01(signal clk: in std_logic; self : inout std_logic_vector ; signal data : out std_logic_vector) is 
+    procedure push_01(self : inout std_logic_vector ; signal data : out std_logic_vector) is 
     begin 
         data <= self ;
     end procedure;
 
-    procedure pull_01(signal clk: in std_logic; self : inout std_logic_vector ; signal data  : in std_logic_vector) is 
+    procedure pull_01(self : inout std_logic_vector ; signal data  : in std_logic_vector) is 
     begin 
         self := data;
     end procedure;
@@ -66,22 +66,22 @@ package body HDPython_core is
 
 
 
-    procedure push_11(signal clk: in std_logic; signal self : inout std_logic ; signal data : out std_logic) is 
+    procedure push_11(signal self : inout std_logic ; signal data : out std_logic) is 
     begin 
         data <= self ;
     end procedure;
 
-    procedure pull_11(signal clk: in std_logic; signal self : inout std_logic ; signal data : in std_logic) is 
+    procedure pull_11(signal self : inout std_logic ; signal data : in std_logic) is 
     begin 
         self <= data;
     end procedure;
 
-    procedure push_11(signal clk: in std_logic; signal self : inout std_logic_vector ; signal data : out std_logic_vector) is 
+    procedure push_11(signal self : inout std_logic_vector ; signal data : out std_logic_vector) is 
     begin 
         data <= self ;
     end procedure;
 
-    procedure pull_11(signal clk: in std_logic; signal self : inout std_logic_vector ; signal data  : in std_logic_vector) is 
+    procedure pull_11(signal self : inout std_logic_vector ; signal data  : in std_logic_vector) is 
     begin 
         self <= data;
     end procedure;

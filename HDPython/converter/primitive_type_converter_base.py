@@ -8,10 +8,7 @@ from HDPython.v_symbol import *
 from  HDPython.free_type_helper import extracted_freeType
 from HDPython.converter.hdl_converter_base import hdl_converter_base
 
-def get_target_name(obj, context_str):
-    target = str(obj)
-    if context_str == 'function' and obj.isVarSigType(varSig.signal_t):
-        target = target.replace(".","_")
+
 
 class v_symbol_type_alias:
     def __init__(self, obj,alias):

@@ -278,13 +278,7 @@ class hdl_converter_base:
         for y in ys:
             line = func_arg["name"] + y["suffix"]+ " => " + str(arg) + y["suffix"]
             ret.append(line)
-            if y["symbol"]._varSigConst ==varSig.signal_t:
-                members = y["symbol"].getMember()
-                for m in members:
-                    if m["symbol"].__writeRead__ == InOut_t.output_t or  m["symbol"].__writeRead__ == InOut_t.InOut_tt:
-                        line = func_arg["name"] + y["suffix"]+"_"+ m["name"] +" => " + arg.__hdl_name__ + y["suffix"]  +"."+m["name"]
-                        ret.append(line)
-                        #print_cnvt(line)
+
 
         return ret
 
@@ -430,6 +424,11 @@ class hdl_converter_base:
     def get_free_symbols(self,obj,name,parent_list=[]):
         return []
 
+    def impl_enter_rising_edge(self, obj):
+        return []
+
+    def impl_exit_rising_edge(self, obj):
+        return []
 
 
     def get_assiment_op(self, obj):

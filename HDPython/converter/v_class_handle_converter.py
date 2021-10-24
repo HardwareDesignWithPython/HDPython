@@ -33,6 +33,31 @@ class v_class_hanlde_converter(v_class_converter):
         if obj.__vectorPush__:
             obj.vpush       =  obj.__hdl_converter__.getConnecting_procedure_vector(obj, InOut_t.output_t, "push",procedureName="push")
 
+        obj.enter_rising_edge = obj.__hdl_converter__.get_enter_rising_edge(obj,"pull", procedureName="enter_rising_edge")
+        obj.exit_rising_edge = obj.__hdl_converter__.get_enter_rising_edge(obj, "push", procedureName="exit_rising_edge")
+
+    def get_enter_rising_edge(self,obj, PushPull, procedureName=None):
+
+
+        body  = obj.__hdl_converter__.get_before_after_conection(obj, PushPull )
+        
+        argumentList =     hdl.to_arglist(
+                obj, 
+                "self",
+                None, 
+                withDefault = False ,
+                astParser=None
+            ) 
+
+        ret  = v_procedure(
+            name=procedureName, 
+            argumentList=argumentList , 
+            body=body,
+            IsEmpty=len(body.strip()) == 0,
+            isFreeFunction=True
+            )
+        
+        return ret
     def getConnecting_procedure_vector(self,obj, InOut_Filter,PushPull,procedureName=None):
         procedure_maker =  vc_helper.getConnecting_procedure_vector(obj, InOut_Filter,PushPull,procedureName)
 
@@ -48,12 +73,18 @@ class v_class_hanlde_converter(v_class_converter):
         for x in members:
             if x["symbol"]._Inout == InOut_t.Internal_t:
                 continue
+            n_connector = vc_helper._get_connector( x["symbol"])
+            if n_connector is None:
+                continue
+            if PushPull == "push" and n_connector._varSigConst == varSig.signal_t and x["symbol"]._varSigConst == varSig.signal_t:
+                continue
+
             ys =hdl.extract_conversion_types(
                 x["symbol"],
                 exclude_class_type= v_classType_t.transition_t,
                 filter_inout=InOut_Filter)
             for y in ys:
-                suffix = "_01(clk, self." if is_variable(y) else "_11(clk, self_sig."
+                suffix = "_01(self." if is_variable(y) else "_11(self_sig."
                 ret.append(PushPull+suffix+ x["name"]+", "+PushPullPrefix + x["name"] +");")
         return ret     
 
@@ -97,15 +128,11 @@ class v_class_hanlde_converter(v_class_converter):
         return ret
         
     def getConnecting_procedure(self,obj, InOut_Filter,PushPull, procedureName=None):
-        ClassName=None
 
-        beforeConnecting, AfterConnecting, inout = obj.__hdl_converter__.get_before_after_conection(
-            obj,
-            InOut_Filter, 
-            PushPull
-        )
-        argumentList = "signal clk : in std_logic; "
-        argumentList += obj.__hdl_converter__.getMemberArgs(
+        inout = " out " if InOut_Filter == InOut_t.output_t  else " in "
+        
+        
+        argumentList = obj.__hdl_converter__.getMemberArgs(
             obj, 
             InOut_Filter,
             inout,
@@ -133,23 +160,13 @@ class v_class_hanlde_converter(v_class_converter):
         )
 
 
-        body='''
-{beforeConnecting}
--- Start Connecting
-{Connecting}
--- End Connecting
-{AfterConnecting}
-        '''.format(
-            beforeConnecting=beforeConnecting,
-            Connecting = Connecting,
-            AfterConnecting=AfterConnecting
-        )
+
 
         ret  = v_procedure(
             name=procedureName, 
             argumentList=argumentList , 
-            body=body,
-            IsEmpty=len(body.strip()) == 0,
+            body=Connecting,
+            IsEmpty=len(Connecting.strip()) == 0,
             isFreeFunction=True
             )
         
@@ -213,8 +230,14 @@ class v_class_hanlde_converter(v_class_converter):
                     exclude_class_type= v_classType_t.transition_t,
                     filter_inout=InOut_t.input_t
                 )
+            ys +=n_connector.__hdl_converter__.extract_conversion_types(
+                    n_connector,
+                    exclude_class_type= v_classType_t.transition_t,
+                    filter_inout=InOut_t.Internal_t
+                )
             for y in ys:
                 content.append( y["symbol"].get_vhdl_name() )
+
 
         ys = hdl.extract_conversion_types(obj)
         content += [ x["symbol"] for x in ys if x["symbol"]._varSigConst == varSig.signal_t ]

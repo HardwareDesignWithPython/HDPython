@@ -65,6 +65,22 @@ class v_process_body_Def(v_ast_base):
         process_decorator = self.dec[0].name +"(" + str(self.dec[0].argList[0])+")"
         return process_decorator
 
+    def get_enter_rising_edge(self):
+        ret =[
+             hdl.impl_enter_rising_edge(x)
+            for x in self.get_local_var()
+        ]
+        ret = join_str(ret,LineBeginning="  ",LineEnding=";\n",IgnoreIfEmpty=True)
+        return ret
+        
+
+    def get_exit_rising_edge(self):
+        ret =[
+             hdl.impl_exit_rising_edge(x)
+            for x in self.get_local_var()
+        ]
+        ret = join_str(ret,LineBeginning="  ",LineEnding=";\n",IgnoreIfEmpty=True)
+        return ret
     def __str__(self):
 
         sensitivity_list = self.get_sensitivity_list()
@@ -73,13 +89,17 @@ class v_process_body_Def(v_ast_base):
         process_decorator = self.get_process_decorator()
         combinatorial_pull = self.get_combinatorial_pull()
         combinatorial_push = self.get_combinatorial_push()
+        enter_rising_endge = self.get_enter_rising_edge()
+        exit_rising_endge = self.get_exit_rising_edge()
 
         ret = """({sensitivity_list}) is
 {process_header}
 begin
 {combinatorial_pull}
 if {process_decorator} then
+{enter_rising_endge}
 {body}
+{exit_rising_endge}
 end if;
 {combinatorial_push}
 """.format(
@@ -88,7 +108,9 @@ end if;
     process_decorator=process_decorator,
     process_header=process_header,
     body=body,
-    combinatorial_push=combinatorial_push
+    combinatorial_push=combinatorial_push,
+    enter_rising_endge = enter_rising_endge,
+    exit_rising_endge = exit_rising_endge
 )
         return ret
 

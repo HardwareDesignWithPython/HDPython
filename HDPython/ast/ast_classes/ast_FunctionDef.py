@@ -82,10 +82,10 @@ def body_unfold_functionDef(astParser,Node):
         }
     )
     obj = get_function_object(astParser,Node.decorator_list)
-    if len(obj) != 0:
+    if len(obj) != 0 and obj[0].__name__ != 'hdl_export':
         return obj[0].__hdl_export__(astParser,Node)
     else:
-        decorator_l = astParser.Unfold_body(Node.decorator_list)
+        decorator_l = []
     
     localContext = astParser.Context
 
