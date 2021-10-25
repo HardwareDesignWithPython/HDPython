@@ -68,14 +68,14 @@ end record;
   function axiStream_slv32_s2m_ctr  return axiStream_slv32_s2m;
   function axiStream_slv32_m2s_ctr  return axiStream_slv32_m2s;
   function axiStream_slv32_ctr  return axiStream_slv32;
-  procedure pull_01 (signal clk : in std_logic;  self : inout axiStream_slv32 ; signal IO_data :  in axiStream_slv32_s2m);
-  procedure push_01 (signal clk : in std_logic;  self : inout axiStream_slv32 ; signal IO_data :  out axiStream_slv32_m2s);
-  procedure pull_01 (signal clk : in std_logic;  self : inout axiStream_slv32 ; signal IO_data :  in axiStream_slv32_m2s);
-  procedure push_01 (signal clk : in std_logic;  self : inout axiStream_slv32 ; signal IO_data :  out axiStream_slv32_s2m);
-  procedure pull_11 (signal clk : in std_logic;  signal  self : inout axiStream_slv32 ; signal IO_data :  in axiStream_slv32_s2m);
-  procedure push_11 (signal clk : in std_logic;  signal  self : inout axiStream_slv32 ; signal IO_data :  out axiStream_slv32_m2s);
-  procedure pull_11 (signal clk : in std_logic;  signal  self : inout axiStream_slv32 ; signal IO_data :  in axiStream_slv32_m2s);
-  procedure push_11 (signal clk : in std_logic;  signal  self : inout axiStream_slv32 ; signal IO_data :  out axiStream_slv32_s2m);
+  procedure pull_01 (self : inout axiStream_slv32 ; signal IO_data :  in axiStream_slv32_s2m);
+  procedure push_01 (self : inout axiStream_slv32 ; signal IO_data :  out axiStream_slv32_m2s);
+  procedure pull_01 (self : inout axiStream_slv32 ; signal IO_data :  out axiStream_slv32_m2s);
+  procedure push_01 (self : inout axiStream_slv32 ; signal IO_data :  in axiStream_slv32_s2m);
+  procedure pull_11 (signal  self : inout axiStream_slv32 ; signal IO_data :  in axiStream_slv32_s2m);
+  procedure push_11 (signal  self : inout axiStream_slv32 ; signal IO_data :  out axiStream_slv32_m2s);
+  procedure pull_11 (signal  self : inout axiStream_slv32 ; signal IO_data :  out axiStream_slv32_m2s);
+  procedure push_11 (signal  self : inout axiStream_slv32 ; signal IO_data :  in axiStream_slv32_s2m);
 ------- End Psuedo Class axiStream_slv32 -------------------------
 -------------------------------------------------------------------------
 
@@ -97,10 +97,12 @@ end record;
         
 
   function axiStream_slv32_master_ctr  return axiStream_slv32_master;
-  procedure pull (signal clk : in std_logic;  self :  inout  axiStream_slv32_master;  signal tx :  in  axiStream_slv32_s2m);
-  procedure push (signal clk : in std_logic;  self :  inout  axiStream_slv32_master;  signal tx :  out  axiStream_slv32_m2s);
-  procedure pull (signal clk  : in std_logic; self :  inout  axiStream_slv32_master_a;  signal tx :  in  axiStream_slv32_s2m_a);
-  procedure push (signal clk  : in std_logic; self :  inout  axiStream_slv32_master_a;  signal tx :  out  axiStream_slv32_m2s_a);
+  procedure pull (self :  inout  axiStream_slv32_master;  signal tx :  in  axiStream_slv32_s2m);
+  procedure push (self :  inout  axiStream_slv32_master;  signal tx :  out  axiStream_slv32_m2s);
+  procedure pull (self :  inout  axiStream_slv32_master_a;  signal tx :  in  axiStream_slv32_s2m_a);
+  procedure push (self :  inout  axiStream_slv32_master_a;  signal tx :  out  axiStream_slv32_m2s_a);
+  procedure enter_rising_edge (self :  inout  axiStream_slv32_master);
+-- empty procedure removed. name: 'exit_rising_edge'
   procedure send_data_00 (self :  inout  axiStream_slv32_master; dataIn :  in  std_logic_vector);
   procedure send_data_01 (self :  inout  axiStream_slv32_master; signal dataIn :  in  std_logic_vector);
   procedure send_data_00 (self :  inout  axiStream_slv32_master; dataIn :  in  integer);
@@ -144,10 +146,12 @@ end record;
         
 
   function axiStream_slv32_slave_ctr  return axiStream_slv32_slave;
-  procedure pull (signal clk : in std_logic;  self :  inout  axiStream_slv32_slave;  signal rx :  in  axiStream_slv32_m2s);
-  procedure push (signal clk : in std_logic;  self :  inout  axiStream_slv32_slave;  signal rx :  out  axiStream_slv32_s2m);
-  procedure pull (signal clk  : in std_logic; self :  inout  axiStream_slv32_slave_a;  signal rx :  in  axiStream_slv32_m2s_a);
-  procedure push (signal clk  : in std_logic; self :  inout  axiStream_slv32_slave_a;  signal rx :  out  axiStream_slv32_s2m_a);
+  procedure pull (self :  inout  axiStream_slv32_slave;  signal rx :  in  axiStream_slv32_m2s);
+  procedure push (self :  inout  axiStream_slv32_slave;  signal rx :  out  axiStream_slv32_s2m);
+  procedure pull (self :  inout  axiStream_slv32_slave_a;  signal rx :  in  axiStream_slv32_m2s_a);
+  procedure push (self :  inout  axiStream_slv32_slave_a;  signal rx :  out  axiStream_slv32_s2m_a);
+  procedure enter_rising_edge (self :  inout  axiStream_slv32_slave);
+  procedure exit_rising_edge (self :  inout  axiStream_slv32_slave);
   procedure get_value_00_rshift (self :  inout  axiStream_slv32_slave; rhs :  inout  axiStream_slv32_master);
   procedure get_value_00_rshift (self :  inout  axiStream_slv32_slave; rhs :  out  std_logic_vector);
 -- empty procedure removed. name: 'get_value_00_rshift'
@@ -193,116 +197,68 @@ function axiStream_slv32_ctr  return axiStream_slv32 is
  
 end function;
 
-procedure pull_01 (signal clk : in std_logic;  self : inout axiStream_slv32 ; signal IO_data :  in axiStream_slv32_s2m) is
+procedure pull_01 (self : inout axiStream_slv32 ; signal IO_data :  in axiStream_slv32_s2m) is
    
   begin 
+     pull_01(self.ready, IO_data.ready);
  
-
--- Start Connecting
-    pull_01(clk, self.ready, IO_data.ready);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure push_01 (signal clk : in std_logic;  self : inout axiStream_slv32 ; signal IO_data :  out axiStream_slv32_m2s) is
+procedure push_01 (self : inout axiStream_slv32 ; signal IO_data :  out axiStream_slv32_m2s) is
    
   begin 
+     push_01(self.data, IO_data.data);
+    push_01(self.last, IO_data.last);
+    push_01(self.valid, IO_data.valid);
  
-
--- Start Connecting
-    push_01(clk, self.data, IO_data.data);
-    push_01(clk, self.last, IO_data.last);
-    push_01(clk, self.valid, IO_data.valid);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure pull_01 (signal clk : in std_logic;  self : inout axiStream_slv32 ; signal IO_data :  in axiStream_slv32_m2s) is
+procedure pull_01 (self : inout axiStream_slv32 ; signal IO_data :  out axiStream_slv32_m2s) is
    
   begin 
+     pull_01(self.data, IO_data.data);
+    pull_01(self.last, IO_data.last);
+    pull_01(self.valid, IO_data.valid);
  
-
--- Start Connecting
-    pull_01(clk, self.data, IO_data.data);
-    pull_01(clk, self.last, IO_data.last);
-    pull_01(clk, self.valid, IO_data.valid);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure push_01 (signal clk : in std_logic;  self : inout axiStream_slv32 ; signal IO_data :  out axiStream_slv32_s2m) is
+procedure push_01 (self : inout axiStream_slv32 ; signal IO_data :  in axiStream_slv32_s2m) is
    
   begin 
+     push_01(self.ready, IO_data.ready);
  
-
--- Start Connecting
-    push_01(clk, self.ready, IO_data.ready);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure pull_11 (signal clk : in std_logic;  signal  self : inout axiStream_slv32 ; signal IO_data :  in axiStream_slv32_s2m) is
+procedure pull_11 (signal  self : inout axiStream_slv32 ; signal IO_data :  in axiStream_slv32_s2m) is
    
   begin 
+     pull_11(self.ready, IO_data.ready);
  
-
--- Start Connecting
-    pull_11(clk, self.ready, IO_data.ready);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure push_11 (signal clk : in std_logic;  signal  self : inout axiStream_slv32 ; signal IO_data :  out axiStream_slv32_m2s) is
+procedure push_11 (signal  self : inout axiStream_slv32 ; signal IO_data :  out axiStream_slv32_m2s) is
    
   begin 
+     push_11(self.data, IO_data.data);
+    push_11(self.last, IO_data.last);
+    push_11(self.valid, IO_data.valid);
  
-
--- Start Connecting
-    push_11(clk, self.data, IO_data.data);
-    push_11(clk, self.last, IO_data.last);
-    push_11(clk, self.valid, IO_data.valid);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure pull_11 (signal clk : in std_logic;  signal  self : inout axiStream_slv32 ; signal IO_data :  in axiStream_slv32_m2s) is
+procedure pull_11 (signal  self : inout axiStream_slv32 ; signal IO_data :  out axiStream_slv32_m2s) is
    
   begin 
+     pull_11(self.data, IO_data.data);
+    pull_11(self.last, IO_data.last);
+    pull_11(self.valid, IO_data.valid);
  
-
--- Start Connecting
-    pull_11(clk, self.data, IO_data.data);
-    pull_11(clk, self.last, IO_data.last);
-    pull_11(clk, self.valid, IO_data.valid);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure push_11 (signal clk : in std_logic;  signal  self : inout axiStream_slv32 ; signal IO_data :  out axiStream_slv32_s2m) is
+procedure push_11 (signal  self : inout axiStream_slv32 ; signal IO_data :  in axiStream_slv32_s2m) is
    
   begin 
+     push_11(self.ready, IO_data.ready);
  
-
--- Start Connecting
-    push_11(clk, self.ready, IO_data.ready);
-
--- End Connecting
-
-         
 end procedure;
 
 ------- End Psuedo Class axiStream_slv32 -------------------------
@@ -318,60 +274,52 @@ function axiStream_slv32_master_ctr  return axiStream_slv32_master is
  
 end function;
 
-procedure pull (signal clk : in std_logic;  self :  inout  axiStream_slv32_master;  signal tx :  in  axiStream_slv32_s2m) is
+procedure pull (self :  inout  axiStream_slv32_master;  signal tx :  in  axiStream_slv32_s2m) is
+   
+  begin 
+     pull_01(self.tx, tx);
+ 
+end procedure;
+
+procedure push (self :  inout  axiStream_slv32_master;  signal tx :  out  axiStream_slv32_m2s) is
+   
+  begin 
+     push_01(self.tx, tx);
+ 
+end procedure;
+
+procedure pull (self :  inout  axiStream_slv32_master_a;  signal tx :  in  axiStream_slv32_s2m_a) is
    
   begin 
  
+        for i in 0 to self'length - 1 loop
+        pull( self =>  self(i), tx => tx(i));
+        end loop;
+             
+end procedure;
 
--- Start Connecting
-    pull_01(clk, self.tx, tx);
+procedure push (self :  inout  axiStream_slv32_master_a;  signal tx :  out  axiStream_slv32_m2s_a) is
+   
+  begin 
+ 
+        for i in 0 to self'length - 1 loop
+        push( self =>  self(i), tx => tx(i));
+        end loop;
+             
+end procedure;
 
--- End Connecting
-  if rising_edge(clk) then
-
-    if (to_bool(self.tx.ready) ) then 
+procedure enter_rising_edge (self :  inout  axiStream_slv32_master) is
+   
+  begin 
+ if (to_bool(self.tx.ready) ) then 
       self.tx.valid := '0';
       self.tx.last := '0';
       self.tx.data := (others => '0');
       
-    end if;
-    end if;
-         
+    end if; 
 end procedure;
 
-procedure push (signal clk : in std_logic;  self :  inout  axiStream_slv32_master;  signal tx :  out  axiStream_slv32_m2s) is
-   
-  begin 
- 
-
--- Start Connecting
-    push_01(clk, self.tx, tx);
-
--- End Connecting
-
-         
-end procedure;
-
-procedure pull (signal clk  : in std_logic; self :  inout  axiStream_slv32_master_a;  signal tx :  in  axiStream_slv32_s2m_a) is
-   
-  begin 
- 
-        for i in 0 to self'length - 1 loop
-        pull( clk => clk, self =>  self(i), tx => tx(i));
-        end loop;
-             
-end procedure;
-
-procedure push (signal clk  : in std_logic; self :  inout  axiStream_slv32_master_a;  signal tx :  out  axiStream_slv32_m2s_a) is
-   
-  begin 
- 
-        for i in 0 to self'length - 1 loop
-        push( clk => clk, self =>  self(i), tx => tx(i));
-        end loop;
-             
-end procedure;
-
+-- empty procedure removed. name: 'exit_rising_edge'
 -- empty procedure removed. name: 'Send_end_Of_Stream_00'
 procedure reset_0 (self :  inout  axiStream_slv32_master) is
    
@@ -449,18 +397,44 @@ function axiStream_slv32_slave_ctr  return axiStream_slv32_slave is
  
 end function;
 
-procedure pull (signal clk : in std_logic;  self :  inout  axiStream_slv32_slave;  signal rx :  in  axiStream_slv32_m2s) is
+procedure pull (self :  inout  axiStream_slv32_slave;  signal rx :  in  axiStream_slv32_m2s) is
+   
+  begin 
+     pull_01(self.rx, rx);
+ 
+end procedure;
+
+procedure push (self :  inout  axiStream_slv32_slave;  signal rx :  out  axiStream_slv32_s2m) is
+   
+  begin 
+     push_01(self.rx, rx);
+ 
+end procedure;
+
+procedure pull (self :  inout  axiStream_slv32_slave_a;  signal rx :  in  axiStream_slv32_m2s_a) is
    
   begin 
  
+        for i in 0 to self'length - 1 loop
+        pull( self =>  self(i), rx => rx(i));
+        end loop;
+             
+end procedure;
 
--- Start Connecting
-    pull_01(clk, self.rx, rx);
+procedure push (self :  inout  axiStream_slv32_slave_a;  signal rx :  out  axiStream_slv32_s2m_a) is
+   
+  begin 
+ 
+        for i in 0 to self'length - 1 loop
+        push( self =>  self(i), rx => rx(i));
+        end loop;
+             
+end procedure;
 
--- End Connecting
-  if rising_edge(clk) then
-
-    if (( to_bool(self.rx.ready)  and to_bool(self.rx.valid) ) ) then 
+procedure enter_rising_edge (self :  inout  axiStream_slv32_slave) is
+   
+  begin 
+ if (( to_bool(self.rx.ready)  and to_bool(self.rx.valid) ) ) then 
       self.data_isvalid := '1';
       
     end if;
@@ -473,18 +447,13 @@ procedure pull (signal clk : in std_logic;  self :  inout  axiStream_slv32_slave
       self.data_internal_isLast2 := self.rx.last;
       self.data_isvalid := '0';
       
-    end if;
-    end if;
-         
+    end if; 
 end procedure;
 
-procedure push (signal clk : in std_logic;  self :  inout  axiStream_slv32_slave;  signal rx :  out  axiStream_slv32_s2m) is
+procedure exit_rising_edge (self :  inout  axiStream_slv32_slave) is
    
   begin 
- 
-  if rising_edge(clk) then
-
-    if (to_bool(self.data_internal_was_read2) ) then 
+ if (to_bool(self.data_internal_was_read2) ) then 
       self.data_internal_isvalid2 := '0';
       
     end if;
@@ -492,34 +461,7 @@ procedure push (signal clk : in std_logic;  self :  inout  axiStream_slv32_slave
     if ((  not  ( to_bool(self.data_isvalid)  )  and  not  ( to_bool(self.data_internal_isvalid2)  ) ) ) then 
       self.rx.ready := '1';
       
-    end if;
-    end if;
--- Start Connecting
-    push_01(clk, self.rx, rx);
-
--- End Connecting
-
-         
-end procedure;
-
-procedure pull (signal clk  : in std_logic; self :  inout  axiStream_slv32_slave_a;  signal rx :  in  axiStream_slv32_m2s_a) is
-   
-  begin 
- 
-        for i in 0 to self'length - 1 loop
-        pull( clk => clk, self =>  self(i), rx => rx(i));
-        end loop;
-             
-end procedure;
-
-procedure push (signal clk  : in std_logic; self :  inout  axiStream_slv32_slave_a;  signal rx :  out  axiStream_slv32_s2m_a) is
-   
-  begin 
- 
-        for i in 0 to self'length - 1 loop
-        push( clk => clk, self =>  self(i), rx => rx(i));
-        end loop;
-             
+    end if; 
 end procedure;
 
 procedure observe_data_00 (self :  inout  axiStream_slv32_slave; dataOut :  out  std_logic_vector) is

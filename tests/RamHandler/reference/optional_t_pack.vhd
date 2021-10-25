@@ -30,10 +30,12 @@ end record;
         
 
   function optional_t_ctr  return optional_t;
-  procedure pull (signal clk : in std_logic;  self :  inout  optional_t);
-  procedure push (signal clk : in std_logic;  self :  inout  optional_t);
-  procedure pull (signal clk  : in std_logic; self :  inout  optional_t_a);
-  procedure push (signal clk  : in std_logic; self :  inout  optional_t_a);
+-- empty procedure removed. name: 'pull'
+-- empty procedure removed. name: 'push'
+-- empty procedure removed. name: 'pull'
+-- empty procedure removed. name: 'push'
+-- empty procedure removed. name: 'enter_rising_edge'
+-- empty procedure removed. name: 'exit_rising_edge'
   function to_bool (self : optional_t) return boolean;
   procedure set_inValid_0 (self :  inout  optional_t);
   function is_valid_0 (self : optional_t) return boolean;
@@ -57,50 +59,12 @@ function optional_t_ctr  return optional_t is
  
 end function;
 
-procedure pull (signal clk : in std_logic;  self :  inout  optional_t) is
-   
-  begin 
- 
-
--- Start Connecting
-
--- End Connecting
-
-         
-end procedure;
-
-procedure push (signal clk : in std_logic;  self :  inout  optional_t) is
-   
-  begin 
- 
-
--- Start Connecting
-
--- End Connecting
-
-         
-end procedure;
-
-procedure pull (signal clk  : in std_logic; self :  inout  optional_t_a) is
-   
-  begin 
- 
-        for i in 0 to self'length - 1 loop
-        pull( clk => clk, self =>  self(i));
-        end loop;
-             
-end procedure;
-
-procedure push (signal clk  : in std_logic; self :  inout  optional_t_a) is
-   
-  begin 
- 
-        for i in 0 to self'length - 1 loop
-        push( clk => clk, self =>  self(i));
-        end loop;
-             
-end procedure;
-
+-- empty procedure removed. name: 'pull'
+-- empty procedure removed. name: 'push'
+-- empty procedure removed. name: 'pull'
+-- empty procedure removed. name: 'push'
+-- empty procedure removed. name: 'enter_rising_edge'
+-- empty procedure removed. name: 'exit_rising_edge'
 procedure reset_0 (self :  inout  optional_t) is
    
   begin 

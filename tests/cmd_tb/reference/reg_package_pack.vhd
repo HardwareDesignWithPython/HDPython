@@ -36,10 +36,10 @@ end record;
         
 
   function reg_package_ctr  return reg_package;
-  procedure pull_01 (signal clk: in std_logic; self : inout reg_package; signal data_IO :  in  reg_package);
-  procedure push_01 (signal clk: in std_logic; self : inout reg_package; signal data_IO :  out  reg_package);
-  procedure pull_11 (signal clk: in std_logic;  signal self : inout reg_package; signal data_IO :  in  reg_package);
-  procedure push_11 (signal clk: in std_logic;  signal self : inout reg_package; signal data_IO :  out  reg_package);
+  procedure pull_01 (self : inout reg_package; signal data_IO :  in  reg_package);
+  procedure push_01 (self : inout reg_package; signal data_IO :  out  reg_package);
+  procedure pull_11 (signal self : inout reg_package; signal data_IO :  in  reg_package);
+  procedure push_11 (signal self : inout reg_package; signal data_IO :  out  reg_package);
   procedure deserialize_000 (self :  inout  reg_package; buff :  in  std_logic_vector; counter :  in  std_logic_vector);
 ------- End Psuedo Class reg_package -------------------------
 -------------------------------------------------------------------------
@@ -59,25 +59,25 @@ function reg_package_ctr  return reg_package is
  
 end function;
 
-procedure pull_01 (signal clk: in std_logic; self : inout reg_package; signal data_IO :  in  reg_package) is
+procedure pull_01 (self : inout reg_package; signal data_IO :  in  reg_package) is
    
   begin 
  self   :=  data_IO; 
 end procedure;
 
-procedure push_01 (signal clk: in std_logic; self : inout reg_package; signal data_IO :  out  reg_package) is
+procedure push_01 (self : inout reg_package; signal data_IO :  out  reg_package) is
    
   begin 
  data_IO  <=  self; 
 end procedure;
 
-procedure pull_11 (signal clk: in std_logic;  signal self : inout reg_package; signal data_IO :  in  reg_package) is
+procedure pull_11 (signal self : inout reg_package; signal data_IO :  in  reg_package) is
    
   begin 
  self   <=  data_IO; 
 end procedure;
 
-procedure push_11 (signal clk: in std_logic;  signal self : inout reg_package; signal data_IO :  out  reg_package) is
+procedure push_11 (signal self : inout reg_package; signal data_IO :  out  reg_package) is
    
   begin 
  data_IO  <=  self; 

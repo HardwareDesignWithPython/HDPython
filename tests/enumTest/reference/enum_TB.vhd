@@ -35,6 +35,7 @@ proc : process(clkgen_clk) is
   begin
   
   if rising_edge(clkgen_clk) then
+  
   counter <= counter + 1;
     
       if (counter = 10) then 
@@ -63,6 +64,7 @@ proc : process(clkgen_clk) is
         
       end if;
     
+  
   end if;
   
   

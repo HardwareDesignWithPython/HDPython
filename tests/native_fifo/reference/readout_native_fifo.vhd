@@ -38,9 +38,10 @@ proc : process(clk, Data_in_m2s, fifo_s_sig) is
     variable   fifo_s : NativeFifoOutSlave1 := NativeFifoOutSlave1_ctr;
   
   begin
-        pull( clk  =>  clk, self_sig  =>  fifo_s_sig, self  =>  fifo_s, rx1 => Data_in_m2s);
+        pull( self_sig  =>  fifo_s_sig, self  =>  fifo_s, rx1 => Data_in_m2s);
   
   if rising_edge(clk) then
+  
   counter <= counter + 1;
     
       if (to_bool(isReceivingData_0(self_sig => fifo_s_sig, self => fifo_s)) ) then 
@@ -48,8 +49,10 @@ proc : process(clk, Data_in_m2s, fifo_s_sig) is
         
       end if;
     
+    exit_rising_edge(self_sig => fifo_s_sig, self => fifo_s);
+  
   end if;
-        push( clk  =>  clk, self_sig  =>  fifo_s_sig, self  =>  fifo_s, rx1 => Data_in_s2m);
+        push( self_sig  =>  fifo_s_sig, self  =>  fifo_s);
   
   
   end process;

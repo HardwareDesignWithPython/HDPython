@@ -4,7 +4,7 @@ __gHDL_export_functions__ = {}
 
 def HDL_Export(Export_function):
     def decorator_rising_edge(func):
-        print(Export_function)
+        #print(Export_function)
         @functools.wraps(func)
         def wrapper_rising_edge(*args, **kwargs):
             return func(*args, **kwargs)

@@ -38,9 +38,11 @@ proc : process(globals_clk, ConfigIn_m2s) is
     variable   ax_slave : axiStream_slv32_slave := axiStream_slv32_slave_ctr;
   
   begin
-        pull( clk  =>  globals_clk, self  =>  ax_slave, rx => ConfigIn_m2s);
+        pull( self  =>  ax_slave, rx => ConfigIn_m2s);
   
   if rising_edge(globals_clk) then
+    enter_rising_edge(self => ax_slave);
+  
   counter <= counter + 1;
     
       if (isReceivingData_0(self => ax_slave)) then 
@@ -53,8 +55,10 @@ proc : process(globals_clk, ConfigIn_m2s) is
         
       end if;
     
+    exit_rising_edge(self => ax_slave);
+  
   end if;
-        push( clk  =>  globals_clk, self  =>  ax_slave, rx => ConfigIn_s2m);
+        push( self  =>  ax_slave, rx => ConfigIn_s2m);
   
   
   end process;

@@ -45,9 +45,11 @@ begin
     variable i_valid : std_logic := '0';
     
     begin
-          pull( clk  =>  clk, self  =>  axiSalve, rx => Axi_in_m2s);
+          pull( self  =>  axiSalve, rx => Axi_in_m2s);
     
     if rising_edge(clk) then
+      enter_rising_edge(self => axiSalve);
+    
     
         if (( isReceivingData_0(self => axiSalve) and counter < sList'length) ) then 
           read_data_00(self => axiSalve, dataOut => axiSalve_buff);
@@ -80,8 +82,10 @@ begin
         end if;
       Axi_out_m2s.valid <= i_valid;
       
+      exit_rising_edge(self => axiSalve);
+    
     end if;
-          push( clk  =>  clk, self  =>  axiSalve, rx => Axi_in_s2m);
+          push( self  =>  axiSalve, rx => Axi_in_s2m);
     
     
     end process;

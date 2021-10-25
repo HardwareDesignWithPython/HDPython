@@ -33,10 +33,10 @@ end record;
    start : integer := 3 ;
     stop : integer := 48
  ) return span_t2;
-  procedure pull_01 (signal clk: in std_logic; self : inout span_t2; signal data_IO :  in  span_t2);
-  procedure push_01 (signal clk: in std_logic; self : inout span_t2; signal data_IO :  out  span_t2);
-  procedure pull_11 (signal clk: in std_logic;  signal self : inout span_t2; signal data_IO :  in  span_t2);
-  procedure push_11 (signal clk: in std_logic;  signal self : inout span_t2; signal data_IO :  out  span_t2);
+  procedure pull_01 (self : inout span_t2; signal data_IO :  in  span_t2);
+  procedure push_01 (self : inout span_t2; signal data_IO :  out  span_t2);
+  procedure pull_11 (signal self : inout span_t2; signal data_IO :  in  span_t2);
+  procedure push_11 (signal self : inout span_t2; signal data_IO :  out  span_t2);
   function isAfterRange_11 (
    Signal self : span_t2 ;
     counter : std_logic_vector
@@ -72,25 +72,25 @@ function span_t2_ctr (
  
 end function;
 
-procedure pull_01 (signal clk: in std_logic; self : inout span_t2; signal data_IO :  in  span_t2) is
+procedure pull_01 (self : inout span_t2; signal data_IO :  in  span_t2) is
    
   begin 
  self   :=  data_IO; 
 end procedure;
 
-procedure push_01 (signal clk: in std_logic; self : inout span_t2; signal data_IO :  out  span_t2) is
+procedure push_01 (self : inout span_t2; signal data_IO :  out  span_t2) is
    
   begin 
  data_IO  <=  self; 
 end procedure;
 
-procedure pull_11 (signal clk: in std_logic;  signal self : inout span_t2; signal data_IO :  in  span_t2) is
+procedure pull_11 (signal self : inout span_t2; signal data_IO :  in  span_t2) is
    
   begin 
  self   <=  data_IO; 
 end procedure;
 
-procedure push_11 (signal clk: in std_logic;  signal self : inout span_t2; signal data_IO :  out  span_t2) is
+procedure push_11 (signal self : inout span_t2; signal data_IO :  out  span_t2) is
    
   begin 
  data_IO  <=  self; 

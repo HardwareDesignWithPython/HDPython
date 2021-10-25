@@ -39,9 +39,11 @@ proc : process(clkgen_clk, cmd_Ax_in_s2m) is
     variable   ax_in : axiStream_slv32_master := axiStream_slv32_master_ctr;
   
   begin
-        pull( clk  =>  clkgen_clk, self  =>  ax_in, tx => cmd_Ax_in_s2m);
+        pull( self  =>  ax_in, tx => cmd_Ax_in_s2m);
   
   if rising_edge(clkgen_clk) then
+    enter_rising_edge(self => ax_in);
+  
   cmd_Ax_data_out_s2m.ready <= '1';
     counter <= counter + 1;
     
@@ -60,8 +62,9 @@ proc : process(clkgen_clk, cmd_Ax_in_s2m) is
     
     end if;
     
+  
   end if;
-        push( clk  =>  clkgen_clk, self  =>  ax_in, tx => cmd_Ax_in_m2s);
+        push( self  =>  ax_in, tx => cmd_Ax_in_m2s);
   
   
   end process;

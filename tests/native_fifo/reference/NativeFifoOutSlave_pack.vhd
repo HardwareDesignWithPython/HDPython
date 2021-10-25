@@ -51,10 +51,12 @@ end record;
 
   function NativeFifoOutSlave_sig_ctr  return NativeFifoOutSlave_sig;
   function NativeFifoOutSlave1_ctr  return NativeFifoOutSlave1;
-  procedure pull (signal clk : in std_logic;  signal self_sig :  inout  NativeFifoOutSlave_sig;  self :  inout  NativeFifoOutSlave1;  signal rx1 :  in  NativeFifoOut_m2s);
-  procedure push (signal clk : in std_logic;  signal self_sig :  inout  NativeFifoOutSlave_sig;  self :  inout  NativeFifoOutSlave1;  signal rx1 :  out  NativeFifoOut_s2m);
-  procedure pull (signal clk  : in std_logic; signal self_sig :  inout  NativeFifoOutSlave_sig_a;  self :  inout  NativeFifoOutSlave1_a;  signal rx1 :  in  NativeFifoOut_m2s_a);
-  procedure push (signal clk  : in std_logic; signal self_sig :  inout  NativeFifoOutSlave_sig_a;  self :  inout  NativeFifoOutSlave1_a;  signal rx1 :  out  NativeFifoOut_s2m_a);
+  procedure pull (signal self_sig :  inout  NativeFifoOutSlave_sig;  self :  inout  NativeFifoOutSlave1;  signal rx1 :  in  NativeFifoOut_m2s);
+-- empty procedure removed. name: 'push'
+  procedure pull (signal self_sig :  inout  NativeFifoOutSlave_sig_a;  self :  inout  NativeFifoOutSlave1_a;  signal rx1 :  in  NativeFifoOut_m2s_a);
+-- empty procedure removed. name: 'push'
+  procedure enter_rising_edge (Signal self_sig :  inout  NativeFifoOutSlave_sig; self :  inout  NativeFifoOutSlave1);
+  procedure exit_rising_edge (Signal self_sig :  inout  NativeFifoOutSlave_sig; self :  inout  NativeFifoOutSlave1);
   procedure read_data_01 (Signal self_sig :  inout  NativeFifoOutSlave_sig; self :  inout  NativeFifoOutSlave1; signal data :  out  std_logic_vector);
   function isReceivingData_0 (
    Signal self_sig : NativeFifoOutSlave_sig ;
@@ -85,76 +87,44 @@ function NativeFifoOutSlave1_ctr  return NativeFifoOutSlave1 is
  
 end function;
 
-procedure pull (signal clk : in std_logic;  signal self_sig :  inout  NativeFifoOutSlave_sig;  self :  inout  NativeFifoOutSlave1;  signal rx1 :  in  NativeFifoOut_m2s) is
+procedure pull (signal self_sig :  inout  NativeFifoOutSlave_sig;  self :  inout  NativeFifoOutSlave1;  signal rx1 :  in  NativeFifoOut_m2s) is
+   
+  begin 
+     pull_11(self_sig.rx1, rx1);
+ 
+end procedure;
+
+-- empty procedure removed. name: 'push'
+procedure pull (signal self_sig :  inout  NativeFifoOutSlave_sig_a;  self :  inout  NativeFifoOutSlave1_a;  signal rx1 :  in  NativeFifoOut_m2s_a) is
    
   begin 
  
+        for i in 0 to self'length - 1 loop
+        pull( self_sig =>  self_sig(i), self =>  self(i), rx1 => rx1(i));
+        end loop;
+             
+end procedure;
 
--- Start Connecting
-    pull_11(clk, self_sig.rx1, rx1);
-
--- End Connecting
-  if rising_edge(clk) then
-
-    if (( to_bool(self.enable1)  and  not  ( to_bool(self.empty1)  ) ) ) then 
+-- empty procedure removed. name: 'push'
+procedure enter_rising_edge (Signal self_sig :  inout  NativeFifoOutSlave_sig; self :  inout  NativeFifoOutSlave1) is
+   
+  begin 
+ if (( to_bool(self.enable1)  and  not  ( to_bool(self.empty1)  ) ) ) then 
       set_value_00_lshift(self => self.buff, rhs => self.rx.data);
       
     end if;
   self.empty1 := self.rx.empty;
   self.enable1 := self.rx.enable;
-  self.rx.enable := '0';
-    end if;
-         
+  self.rx.enable := '0'; 
 end procedure;
 
-procedure push (signal clk : in std_logic;  signal self_sig :  inout  NativeFifoOutSlave_sig;  self :  inout  NativeFifoOutSlave1;  signal rx1 :  out  NativeFifoOut_s2m) is
+procedure exit_rising_edge (Signal self_sig :  inout  NativeFifoOutSlave_sig; self :  inout  NativeFifoOutSlave1) is
    
   begin 
- 
-  if rising_edge(clk) then
-
-    if ( not  ( to_bool(isReceivingData_0(self => self.buff))  ) ) then 
+ if ( not  ( to_bool(isReceivingData_0(self => self.buff))  ) ) then 
       self.rx.enable := '1';
       
-    end if;
-    end if;
-
-    if (self_sig.rx1.empty = '0') then 
-      self_sig.rx1.enable <= self.rx.enable;
-      
-    else
-      self_sig.rx1.enable <= '0';
-      
-    end if;
-  self.rx.empty := self_sig.rx1.empty;
-  self.rx.data := self_sig.rx1.data;
-  
--- Start Connecting
-    push_11(clk, self_sig.rx1, rx1);
-
--- End Connecting
-
-         
-end procedure;
-
-procedure pull (signal clk  : in std_logic; signal self_sig :  inout  NativeFifoOutSlave_sig_a;  self :  inout  NativeFifoOutSlave1_a;  signal rx1 :  in  NativeFifoOut_m2s_a) is
-   
-  begin 
- 
-        for i in 0 to self'length - 1 loop
-        pull( clk => clk, self_sig =>  self_sig(i), self =>  self(i), rx1 => rx1(i));
-        end loop;
-             
-end procedure;
-
-procedure push (signal clk  : in std_logic; signal self_sig :  inout  NativeFifoOutSlave_sig_a;  self :  inout  NativeFifoOutSlave1_a;  signal rx1 :  out  NativeFifoOut_s2m_a) is
-   
-  begin 
- 
-        for i in 0 to self'length - 1 loop
-        push( clk => clk, self_sig =>  self_sig(i), self =>  self(i), rx1 => rx1(i));
-        end loop;
-             
+    end if; 
 end procedure;
 
 function isReceivingData_0 (

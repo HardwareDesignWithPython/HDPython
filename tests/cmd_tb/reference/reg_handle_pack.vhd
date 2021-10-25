@@ -64,14 +64,14 @@ end record;
   function reg_handle_s2m_ctr  return reg_handle_s2m;
   function reg_handle_m2s_ctr  return reg_handle_m2s;
   function reg_handle_ctr  return reg_handle;
-  procedure pull_01 (signal clk : in std_logic;  self : inout reg_handle ; signal IO_data :  in reg_handle_s2m);
-  procedure push_01 (signal clk : in std_logic;  self : inout reg_handle ; signal IO_data :  out reg_handle_m2s);
-  procedure pull_01 (signal clk : in std_logic;  self : inout reg_handle ; signal IO_data :  in reg_handle_m2s);
-  procedure push_01 (signal clk : in std_logic;  self : inout reg_handle ; signal IO_data :  out reg_handle_s2m);
-  procedure pull_11 (signal clk : in std_logic;  signal  self : inout reg_handle ; signal IO_data :  in reg_handle_s2m);
-  procedure push_11 (signal clk : in std_logic;  signal  self : inout reg_handle ; signal IO_data :  out reg_handle_m2s);
-  procedure pull_11 (signal clk : in std_logic;  signal  self : inout reg_handle ; signal IO_data :  in reg_handle_m2s);
-  procedure push_11 (signal clk : in std_logic;  signal  self : inout reg_handle ; signal IO_data :  out reg_handle_s2m);
+  procedure pull_01 (self : inout reg_handle ; signal IO_data :  in reg_handle_s2m);
+  procedure push_01 (self : inout reg_handle ; signal IO_data :  out reg_handle_m2s);
+  procedure pull_01 (self : inout reg_handle ; signal IO_data :  out reg_handle_m2s);
+  procedure push_01 (self : inout reg_handle ; signal IO_data :  in reg_handle_s2m);
+  procedure pull_11 (signal  self : inout reg_handle ; signal IO_data :  in reg_handle_s2m);
+  procedure push_11 (signal  self : inout reg_handle ; signal IO_data :  out reg_handle_m2s);
+  procedure pull_11 (signal  self : inout reg_handle ; signal IO_data :  out reg_handle_m2s);
+  procedure push_11 (signal  self : inout reg_handle ; signal IO_data :  in reg_handle_s2m);
 ------- End Psuedo Class reg_handle -------------------------
 -------------------------------------------------------------------------
 
@@ -104,112 +104,64 @@ function reg_handle_ctr  return reg_handle is
  
 end function;
 
-procedure pull_01 (signal clk : in std_logic;  self : inout reg_handle ; signal IO_data :  in reg_handle_s2m) is
+procedure pull_01 (self : inout reg_handle ; signal IO_data :  in reg_handle_s2m) is
    
   begin 
+     pull_01(self.data_in, IO_data.data_in);
  
-
--- Start Connecting
-    pull_01(clk, self.data_in, IO_data.data_in);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure push_01 (signal clk : in std_logic;  self : inout reg_handle ; signal IO_data :  out reg_handle_m2s) is
+procedure push_01 (self : inout reg_handle ; signal IO_data :  out reg_handle_m2s) is
    
   begin 
+     push_01(self.addr, IO_data.addr);
+    push_01(self.data_out, IO_data.data_out);
  
-
--- Start Connecting
-    push_01(clk, self.addr, IO_data.addr);
-    push_01(clk, self.data_out, IO_data.data_out);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure pull_01 (signal clk : in std_logic;  self : inout reg_handle ; signal IO_data :  in reg_handle_m2s) is
+procedure pull_01 (self : inout reg_handle ; signal IO_data :  out reg_handle_m2s) is
    
   begin 
+     pull_01(self.addr, IO_data.addr);
+    pull_01(self.data_out, IO_data.data_out);
  
-
--- Start Connecting
-    pull_01(clk, self.addr, IO_data.addr);
-    pull_01(clk, self.data_out, IO_data.data_out);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure push_01 (signal clk : in std_logic;  self : inout reg_handle ; signal IO_data :  out reg_handle_s2m) is
+procedure push_01 (self : inout reg_handle ; signal IO_data :  in reg_handle_s2m) is
    
   begin 
+     push_01(self.data_in, IO_data.data_in);
  
-
--- Start Connecting
-    push_01(clk, self.data_in, IO_data.data_in);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure pull_11 (signal clk : in std_logic;  signal  self : inout reg_handle ; signal IO_data :  in reg_handle_s2m) is
+procedure pull_11 (signal  self : inout reg_handle ; signal IO_data :  in reg_handle_s2m) is
    
   begin 
+     pull_11(self.data_in, IO_data.data_in);
  
-
--- Start Connecting
-    pull_11(clk, self.data_in, IO_data.data_in);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure push_11 (signal clk : in std_logic;  signal  self : inout reg_handle ; signal IO_data :  out reg_handle_m2s) is
+procedure push_11 (signal  self : inout reg_handle ; signal IO_data :  out reg_handle_m2s) is
    
   begin 
+     push_11(self.addr, IO_data.addr);
+    push_11(self.data_out, IO_data.data_out);
  
-
--- Start Connecting
-    push_11(clk, self.addr, IO_data.addr);
-    push_11(clk, self.data_out, IO_data.data_out);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure pull_11 (signal clk : in std_logic;  signal  self : inout reg_handle ; signal IO_data :  in reg_handle_m2s) is
+procedure pull_11 (signal  self : inout reg_handle ; signal IO_data :  out reg_handle_m2s) is
    
   begin 
+     pull_11(self.addr, IO_data.addr);
+    pull_11(self.data_out, IO_data.data_out);
  
-
--- Start Connecting
-    pull_11(clk, self.addr, IO_data.addr);
-    pull_11(clk, self.data_out, IO_data.data_out);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure push_11 (signal clk : in std_logic;  signal  self : inout reg_handle ; signal IO_data :  out reg_handle_s2m) is
+procedure push_11 (signal  self : inout reg_handle ; signal IO_data :  in reg_handle_s2m) is
    
   begin 
+     push_11(self.data_in, IO_data.data_in);
  
-
--- Start Connecting
-    push_11(clk, self.data_in, IO_data.data_in);
-
--- End Connecting
-
-         
 end procedure;
 
 ------- End Psuedo Class reg_handle -------------------------

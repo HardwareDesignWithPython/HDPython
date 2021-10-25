@@ -300,27 +300,27 @@ class v_class_converter(hdl_converter_base):
 
     def impl_enter_rising_edge(self, obj):
         if not obj.__hdl_converter__.getBody_onPull(obj).strip():
-            return ""
+            return []
         func_arg = {
             "name" : "self",
             "symbol" : obj
         }
         arg = str(obj)
         argument = hdl.impl_function_argument(obj , func_arg, arg)
-        ret = join_str(argument,start="enter_rising_edge(", end=");\n",IgnoreIfEmpty=True)
+        ret = join_str(argument,start="enter_rising_edge(", end=");\n",IgnoreIfEmpty=True, Delimeter=", ")
         #ret = "enter_rising_edge(" + argument + ");"
         return ret
 
     def impl_exit_rising_edge(self, obj):
         if not obj.__hdl_converter__.getBody_onPush(obj).strip():
-            return ""
+            return []
         func_arg = {
             "name" : "self",
             "symbol" : obj
         }
         arg = str(obj)
         argument = hdl.impl_function_argument(obj , func_arg, arg)
-        ret = join_str(argument,start="exit_rising_edge(", end=");\n",IgnoreIfEmpty=True)
+        ret = join_str(argument,start="exit_rising_edge(", end=");\n",IgnoreIfEmpty=True, Delimeter=", ")
         
         return ret
 

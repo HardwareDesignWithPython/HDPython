@@ -31,10 +31,10 @@ end record;
 
 -- v_list getHeader
   function optional_trigger_bits_ctr  return optional_trigger_bits;
-  procedure pull_01 (signal clk: in std_logic; self : inout optional_trigger_bits; signal data_IO :  in  optional_trigger_bits);
-  procedure push_01 (signal clk: in std_logic; self : inout optional_trigger_bits; signal data_IO :  out  optional_trigger_bits);
-  procedure pull_11 (signal clk: in std_logic;  signal self : inout optional_trigger_bits; signal data_IO :  in  optional_trigger_bits);
-  procedure push_11 (signal clk: in std_logic;  signal self : inout optional_trigger_bits; signal data_IO :  out  optional_trigger_bits);
+  procedure pull_01 (self : inout optional_trigger_bits; signal data_IO :  in  optional_trigger_bits);
+  procedure push_01 (self : inout optional_trigger_bits; signal data_IO :  out  optional_trigger_bits);
+  procedure pull_11 (signal self : inout optional_trigger_bits; signal data_IO :  in  optional_trigger_bits);
+  procedure push_11 (signal self : inout optional_trigger_bits; signal data_IO :  out  optional_trigger_bits);
 ------- End Psuedo Class optional_trigger_bits -------------------------
 -------------------------------------------------------------------------
 
@@ -53,25 +53,25 @@ function optional_trigger_bits_ctr  return optional_trigger_bits is
  
 end function;
 
-procedure pull_01 (signal clk: in std_logic; self : inout optional_trigger_bits; signal data_IO :  in  optional_trigger_bits) is
+procedure pull_01 (self : inout optional_trigger_bits; signal data_IO :  in  optional_trigger_bits) is
    
   begin 
  self   :=  data_IO; 
 end procedure;
 
-procedure push_01 (signal clk: in std_logic; self : inout optional_trigger_bits; signal data_IO :  out  optional_trigger_bits) is
+procedure push_01 (self : inout optional_trigger_bits; signal data_IO :  out  optional_trigger_bits) is
    
   begin 
  data_IO  <=  self; 
 end procedure;
 
-procedure pull_11 (signal clk: in std_logic;  signal self : inout optional_trigger_bits; signal data_IO :  in  optional_trigger_bits) is
+procedure pull_11 (signal self : inout optional_trigger_bits; signal data_IO :  in  optional_trigger_bits) is
    
   begin 
  self   <=  data_IO; 
 end procedure;
 
-procedure push_11 (signal clk: in std_logic;  signal self : inout optional_trigger_bits; signal data_IO :  out  optional_trigger_bits) is
+procedure push_11 (signal self : inout optional_trigger_bits; signal data_IO :  out  optional_trigger_bits) is
    
   begin 
  data_IO  <=  self; 

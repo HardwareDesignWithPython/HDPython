@@ -39,10 +39,12 @@ end record;
 
 -- v_list getHeader
   function small_buffer_ctr  return small_buffer;
-  procedure pull (signal clk : in std_logic;  self :  inout  small_buffer);
-  procedure push (signal clk : in std_logic;  self :  inout  small_buffer);
-  procedure pull (signal clk  : in std_logic; self :  inout  small_buffer_a);
-  procedure push (signal clk  : in std_logic; self :  inout  small_buffer_a);
+-- empty procedure removed. name: 'pull'
+-- empty procedure removed. name: 'push'
+-- empty procedure removed. name: 'pull'
+-- empty procedure removed. name: 'push'
+-- empty procedure removed. name: 'enter_rising_edge'
+-- empty procedure removed. name: 'exit_rising_edge'
   procedure set_value_00_lshift (self :  inout  small_buffer; rhs :  in  std_logic_vector);
   procedure reset_0 (self :  inout  small_buffer);
   function length (self : small_buffer) return integer;
@@ -69,50 +71,12 @@ function small_buffer_ctr  return small_buffer is
  
 end function;
 
-procedure pull (signal clk : in std_logic;  self :  inout  small_buffer) is
-   
-  begin 
- 
-
--- Start Connecting
-
--- End Connecting
-
-         
-end procedure;
-
-procedure push (signal clk : in std_logic;  self :  inout  small_buffer) is
-   
-  begin 
- 
-
--- Start Connecting
-
--- End Connecting
-
-         
-end procedure;
-
-procedure pull (signal clk  : in std_logic; self :  inout  small_buffer_a) is
-   
-  begin 
- 
-        for i in 0 to self'length - 1 loop
-        pull( clk => clk, self =>  self(i));
-        end loop;
-             
-end procedure;
-
-procedure push (signal clk  : in std_logic; self :  inout  small_buffer_a) is
-   
-  begin 
- 
-        for i in 0 to self'length - 1 loop
-        push( clk => clk, self =>  self(i));
-        end loop;
-             
-end procedure;
-
+-- empty procedure removed. name: 'pull'
+-- empty procedure removed. name: 'push'
+-- empty procedure removed. name: 'pull'
+-- empty procedure removed. name: 'push'
+-- empty procedure removed. name: 'enter_rising_edge'
+-- empty procedure removed. name: 'exit_rising_edge'
 function isReceivingData_0 (self : small_buffer) return boolean is
    
   begin 

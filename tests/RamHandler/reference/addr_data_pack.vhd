@@ -30,10 +30,10 @@ end record;
         
 
   function addr_data_ctr  return addr_data;
-  procedure pull_01 (signal clk: in std_logic; self : inout addr_data; signal data_IO :  in  addr_data);
-  procedure push_01 (signal clk: in std_logic; self : inout addr_data; signal data_IO :  out  addr_data);
-  procedure pull_11 (signal clk: in std_logic;  signal self : inout addr_data; signal data_IO :  in  addr_data);
-  procedure push_11 (signal clk: in std_logic;  signal self : inout addr_data; signal data_IO :  out  addr_data);
+  procedure pull_01 (self : inout addr_data; signal data_IO :  in  addr_data);
+  procedure push_01 (self : inout addr_data; signal data_IO :  out  addr_data);
+  procedure pull_11 (signal self : inout addr_data; signal data_IO :  in  addr_data);
+  procedure push_11 (signal self : inout addr_data; signal data_IO :  out  addr_data);
 ------- End Psuedo Class addr_data -------------------------
 -------------------------------------------------------------------------
 
@@ -52,25 +52,25 @@ function addr_data_ctr  return addr_data is
  
 end function;
 
-procedure pull_01 (signal clk: in std_logic; self : inout addr_data; signal data_IO :  in  addr_data) is
+procedure pull_01 (self : inout addr_data; signal data_IO :  in  addr_data) is
    
   begin 
  self   :=  data_IO; 
 end procedure;
 
-procedure push_01 (signal clk: in std_logic; self : inout addr_data; signal data_IO :  out  addr_data) is
+procedure push_01 (self : inout addr_data; signal data_IO :  out  addr_data) is
    
   begin 
  data_IO  <=  self; 
 end procedure;
 
-procedure pull_11 (signal clk: in std_logic;  signal self : inout addr_data; signal data_IO :  in  addr_data) is
+procedure pull_11 (signal self : inout addr_data; signal data_IO :  in  addr_data) is
    
   begin 
  self   <=  data_IO; 
 end procedure;
 
-procedure push_11 (signal clk: in std_logic;  signal self : inout addr_data; signal data_IO :  out  addr_data) is
+procedure push_11 (signal self : inout addr_data; signal data_IO :  out  addr_data) is
    
   begin 
  data_IO  <=  self; 

@@ -41,10 +41,12 @@ end record;
 
 -- v_list getHeader
   function ram_handle_master_ctr  return ram_handle_master;
-  procedure pull (signal clk : in std_logic;  self :  inout  ram_handle_master;  signal tx :  in  ram_handler_s2m);
-  procedure push (signal clk : in std_logic;  self :  inout  ram_handle_master;  signal tx :  out  ram_handler_m2s);
-  procedure pull (signal clk  : in std_logic; self :  inout  ram_handle_master_a;  signal tx :  in  ram_handler_s2m_a);
-  procedure push (signal clk  : in std_logic; self :  inout  ram_handle_master_a;  signal tx :  out  ram_handler_m2s_a);
+  procedure pull (self :  inout  ram_handle_master;  signal tx :  in  ram_handler_s2m);
+  procedure push (self :  inout  ram_handle_master;  signal tx :  out  ram_handler_m2s);
+  procedure pull (self :  inout  ram_handle_master_a;  signal tx :  in  ram_handler_s2m_a);
+  procedure push (self :  inout  ram_handle_master_a;  signal tx :  out  ram_handler_m2s_a);
+  procedure enter_rising_edge (self :  inout  ram_handle_master);
+  procedure exit_rising_edge (self :  inout  ram_handle_master);
   procedure request_data_010 (self :  inout  ram_handle_master; signal adr :  in  std_logic_vector; data :  inout  optional_t);
   procedure request_data_011 (self :  inout  ram_handle_master; signal adr :  in  std_logic_vector; signal data :  out  std_logic_vector);
   procedure send_data_011 (self :  inout  ram_handle_master; signal adr :  in  std_logic_vector; signal data :  in  std_logic_vector);
@@ -69,17 +71,44 @@ function ram_handle_master_ctr  return ram_handle_master is
  
 end function;
 
-procedure pull (signal clk : in std_logic;  self :  inout  ram_handle_master;  signal tx :  in  ram_handler_s2m) is
+procedure pull (self :  inout  ram_handle_master;  signal tx :  in  ram_handler_s2m) is
+   
+  begin 
+     pull_01(self.tx, tx);
+ 
+end procedure;
+
+procedure push (self :  inout  ram_handle_master;  signal tx :  out  ram_handler_m2s) is
+   
+  begin 
+     push_01(self.tx, tx);
+ 
+end procedure;
+
+procedure pull (self :  inout  ram_handle_master_a;  signal tx :  in  ram_handler_s2m_a) is
    
   begin 
  
+        for i in 0 to self'length - 1 loop
+        pull( self =>  self(i), tx => tx(i));
+        end loop;
+             
+end procedure;
 
--- Start Connecting
-    pull_01(clk, self.tx, tx);
+procedure push (self :  inout  ram_handle_master_a;  signal tx :  out  ram_handler_m2s_a) is
+   
+  begin 
+ 
+        for i in 0 to self'length - 1 loop
+        push( self =>  self(i), tx => tx(i));
+        end loop;
+             
+end procedure;
 
--- End Connecting
-  if rising_edge(clk) then
-self.tx.write_enable := '0';
+procedure enter_rising_edge (self :  inout  ram_handle_master) is
+   
+  begin 
+ self.tx.write_enable := '0';
   for i10 in 0 to self.addr'length - 1 -1 loop 
       self.addr(i10) := self.addr(i10 + 1);
     end loop;
@@ -87,18 +116,13 @@ self.tx.write_enable := '0';
   self.data_requested := '0';
   self.c_data.address := self.addr(0);
   self.c_data.data := self.tx.read_data;
-  set_value_00_lshift(self => self.buff, rhs => self.c_data);
-    end if;
-         
+  set_value_00_lshift(self => self.buff, rhs => self.c_data); 
 end procedure;
 
-procedure push (signal clk : in std_logic;  self :  inout  ram_handle_master;  signal tx :  out  ram_handler_m2s) is
+procedure exit_rising_edge (self :  inout  ram_handle_master) is
    
   begin 
- 
-  if rising_edge(clk) then
-
-    if (self.data_requested = '0') then 
+ if (self.data_requested = '0') then 
       self.addr(2) := self.addr(1) + 1;
       
     end if;
@@ -107,34 +131,7 @@ procedure push (signal clk : in std_logic;  self :  inout  ram_handle_master;  s
       self.addr(2) :=  (others => '0');
       
     end if;
-  self.tx.read_address := self.addr(2);
-    end if;
--- Start Connecting
-    push_01(clk, self.tx, tx);
-
--- End Connecting
-
-         
-end procedure;
-
-procedure pull (signal clk  : in std_logic; self :  inout  ram_handle_master_a;  signal tx :  in  ram_handler_s2m_a) is
-   
-  begin 
- 
-        for i in 0 to self'length - 1 loop
-        pull( clk => clk, self =>  self(i), tx => tx(i));
-        end loop;
-             
-end procedure;
-
-procedure push (signal clk  : in std_logic; self :  inout  ram_handle_master_a;  signal tx :  out  ram_handler_m2s_a) is
-   
-  begin 
- 
-        for i in 0 to self'length - 1 loop
-        push( clk => clk, self =>  self(i), tx => tx(i));
-        end loop;
-             
+  self.tx.read_address := self.addr(2); 
 end procedure;
 
 function ready_to_send_0 (

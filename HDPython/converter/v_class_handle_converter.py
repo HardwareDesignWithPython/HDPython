@@ -222,6 +222,8 @@ class v_class_hanlde_converter(v_class_converter):
             n_connector = vc_helper._get_connector( x["symbol"])
             if n_connector is None:
                 continue
+            if isinstance(n_connector, str):
+                continue
 
             inout = InOut_t.input_t if x["symbol"]._Inout == InOut_t.Master_t else InOut_t.output_t
 

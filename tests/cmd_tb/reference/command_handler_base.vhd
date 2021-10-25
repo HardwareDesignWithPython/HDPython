@@ -45,11 +45,14 @@ proc : process(clk, Ax_in_m2s, DevHandle_s2m, Ax_out_s2m) is
     variable   data_out : axiStream_slv32_master := axiStream_slv32_master_ctr;
   
   begin
-        pull( clk  =>  clk, self  =>  data_in, rx => Ax_in_m2s);
-        pull( clk  =>  clk, self  =>  Target_device, reg_ports => DevHandle_s2m);
-        pull( clk  =>  clk, self  =>  data_out, tx => Ax_out_s2m);
+        pull( self  =>  data_in, rx => Ax_in_m2s);
+        pull( self  =>  Target_device, reg_ports => DevHandle_s2m);
+        pull( self  =>  data_out, tx => Ax_out_s2m);
   
   if rising_edge(clk) then
+    enter_rising_edge(self => data_in);
+    enter_rising_edge(self => data_out);
+  
   
     if (isReceivingData_0(self => data_in)) then 
     
@@ -91,10 +94,12 @@ proc : process(clk, Ax_in_m2s, DevHandle_s2m, Ax_out_s2m) is
     
     end if;
     
+    exit_rising_edge(self => data_in);
+  
   end if;
-        push( clk  =>  clk, self  =>  data_in, rx => Ax_in_s2m);
-        push( clk  =>  clk, self  =>  Target_device, reg_ports => DevHandle_m2s);
-        push( clk  =>  clk, self  =>  data_out, tx => Ax_out_m2s);
+        push( self  =>  data_in, rx => Ax_in_s2m);
+        push( self  =>  Target_device, reg_ports => DevHandle_m2s);
+        push( self  =>  data_out, tx => Ax_out_m2s);
   
   
   end process;

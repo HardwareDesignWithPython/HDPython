@@ -35,10 +35,13 @@ begin
       variable   axMaster : axiStream_slv32_master := axiStream_slv32_master_ctr;
     
     begin
-          pull( clk  =>  clk, self  =>  axiSalve, rx => Axi_in_m2s);
-          pull( clk  =>  clk, self  =>  axMaster, tx => Axi_out_s2m);
+          pull( self  =>  axiSalve, rx => Axi_in_m2s);
+          pull( self  =>  axMaster, tx => Axi_out_s2m);
     
     if rising_edge(clk) then
+      enter_rising_edge(self => axiSalve);
+      enter_rising_edge(self => axMaster);
+    
     
         if (( isReceivingData_0(self => axiSalve) and ready_to_send_0(self => axMaster)) ) then 
           get_value_00_rshift(self => axiSalve, rhs => axMaster);
@@ -46,9 +49,11 @@ begin
           
         end if;
       
+      exit_rising_edge(self => axiSalve);
+    
     end if;
-          push( clk  =>  clk, self  =>  axiSalve, rx => Axi_in_s2m);
-          push( clk  =>  clk, self  =>  axMaster, tx => Axi_out_m2s);
+          push( self  =>  axiSalve, rx => Axi_in_s2m);
+          push( self  =>  axMaster, tx => Axi_out_m2s);
     
     
     end process;

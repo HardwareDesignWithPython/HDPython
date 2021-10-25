@@ -1,0 +1,41 @@
+<!--=======================-->
+  <Converting Index="1">
+    <package_conversion name="edge_detection">
+      <status ="sucess">
+    </package_conversion>
+    <entity_conversion name="edge_detection">
+      <use_template function ="reset" args="optional_t" />
+      <Missing_Template function="set_data" args="optional_t, std_logic_vector(31 downto 0)" />
+      <Failed_to_convert name="edge_detection"/>
+      <status ="failed">
+    </entity_conversion>
+    <package_conversion name="v_symbol">
+      <status ="sucess">
+    </package_conversion>
+    <package_conversion name="optional_t">
+      <processing name="optional_t" MemfunctionCalls="2">
+        <request_new_template name="get_data"/>
+        <request_new_template name="__rshift__"/>
+        <request_new_template name="is_valid"/>
+        <request_new_template name="set_inValid"/>
+        <request_new_template name="set_data"/>
+        <request_new_template name="__bool__"/>
+        <use_template function ="is_valid" args="optional_t" />
+      </processing>
+      <status ="sucess">
+    </package_conversion>
+  </Converting>
+<!--=======================-->
+  <Converting Index="2">
+    <package_conversion name="edge_detection">
+      <status ="sucess">
+    </package_conversion>
+    <entity_conversion name="edge_detection">
+      <use_template function ="reset" args="optional_t" />
+      <use_template function ="set_data" args="optional_t, std_logic_vector(31 downto 0)" />
+      <status ="sucess">
+    </entity_conversion>
+  </Converting>
+<!--=======================-->
+  <Converting Index="3">
+  </Converting>

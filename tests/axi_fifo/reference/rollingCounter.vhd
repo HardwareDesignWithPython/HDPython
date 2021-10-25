@@ -34,9 +34,11 @@ begin
       variable   v_Axi_out : axiStream_slv32_master := axiStream_slv32_master_ctr;
     
     begin
-          pull( clk  =>  clk, self  =>  v_Axi_out, tx => Axi_out_s2m);
+          pull( self  =>  v_Axi_out, tx => Axi_out_s2m);
     
     if rising_edge(clk) then
+      enter_rising_edge(self => v_Axi_out);
+    
     
         if (ready_to_send_0(self => v_Axi_out)) then 
           send_data_01(self => v_Axi_out, dataIn => counter);
@@ -49,8 +51,9 @@ begin
           
         end if;
       
+    
     end if;
-          push( clk  =>  clk, self  =>  v_Axi_out, tx => Axi_out_m2s);
+          push( self  =>  v_Axi_out, tx => Axi_out_m2s);
     
     
     end process;

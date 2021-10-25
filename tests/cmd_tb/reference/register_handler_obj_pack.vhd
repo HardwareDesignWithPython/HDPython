@@ -37,10 +37,12 @@ end record;
         
 
   function register_handler_obj_ctr  return register_handler_obj;
-  procedure pull (signal clk : in std_logic;  self :  inout  register_handler_obj;  signal reg_ports :  in  reg_handle_s2m);
-  procedure push (signal clk : in std_logic;  self :  inout  register_handler_obj;  signal reg_ports :  out  reg_handle_m2s);
-  procedure pull (signal clk  : in std_logic; self :  inout  register_handler_obj_a;  signal reg_ports :  in  reg_handle_s2m_a);
-  procedure push (signal clk  : in std_logic; self :  inout  register_handler_obj_a;  signal reg_ports :  out  reg_handle_m2s_a);
+  procedure pull (self :  inout  register_handler_obj;  signal reg_ports :  in  reg_handle_s2m);
+  procedure push (self :  inout  register_handler_obj;  signal reg_ports :  out  reg_handle_m2s);
+  procedure pull (self :  inout  register_handler_obj_a;  signal reg_ports :  in  reg_handle_s2m_a);
+  procedure push (self :  inout  register_handler_obj_a;  signal reg_ports :  out  reg_handle_m2s_a);
+-- empty procedure removed. name: 'enter_rising_edge'
+-- empty procedure removed. name: 'exit_rising_edge'
   procedure process_event_000 (self :  inout  register_handler_obj; ax_in :  inout  axiStream_slv32_slave; ax_out :  inout  axiStream_slv32_master);
   function isDone_0 (
    self : register_handler_obj
@@ -67,52 +69,42 @@ function register_handler_obj_ctr  return register_handler_obj is
  
 end function;
 
-procedure pull (signal clk : in std_logic;  self :  inout  register_handler_obj;  signal reg_ports :  in  reg_handle_s2m) is
+procedure pull (self :  inout  register_handler_obj;  signal reg_ports :  in  reg_handle_s2m) is
    
   begin 
+     pull_01(self.reg_ports, reg_ports);
  
-
--- Start Connecting
-    pull_01(clk, self.reg_ports, reg_ports);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure push (signal clk : in std_logic;  self :  inout  register_handler_obj;  signal reg_ports :  out  reg_handle_m2s) is
+procedure push (self :  inout  register_handler_obj;  signal reg_ports :  out  reg_handle_m2s) is
    
   begin 
+     push_01(self.reg_ports, reg_ports);
  
-
--- Start Connecting
-    push_01(clk, self.reg_ports, reg_ports);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure pull (signal clk  : in std_logic; self :  inout  register_handler_obj_a;  signal reg_ports :  in  reg_handle_s2m_a) is
+procedure pull (self :  inout  register_handler_obj_a;  signal reg_ports :  in  reg_handle_s2m_a) is
    
   begin 
  
         for i in 0 to self'length - 1 loop
-        pull( clk => clk, self =>  self(i), reg_ports => reg_ports(i));
+        pull( self =>  self(i), reg_ports => reg_ports(i));
         end loop;
              
 end procedure;
 
-procedure push (signal clk  : in std_logic; self :  inout  register_handler_obj_a;  signal reg_ports :  out  reg_handle_m2s_a) is
+procedure push (self :  inout  register_handler_obj_a;  signal reg_ports :  out  reg_handle_m2s_a) is
    
   begin 
  
         for i in 0 to self'length - 1 loop
-        push( clk => clk, self =>  self(i), reg_ports => reg_ports(i));
+        push( self =>  self(i), reg_ports => reg_ports(i));
         end loop;
              
 end procedure;
 
+-- empty procedure removed. name: 'enter_rising_edge'
+-- empty procedure removed. name: 'exit_rising_edge'
 function isThisHeader_00 (
    self : register_handler_obj ;
     buff : std_logic_vector

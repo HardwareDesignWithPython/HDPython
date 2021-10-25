@@ -64,14 +64,14 @@ end record;
   function NativeFifoOut_s2m_ctr  return NativeFifoOut_s2m;
   function NativeFifoOut_m2s_ctr  return NativeFifoOut_m2s;
   function NativeFifoOut_ctr  return NativeFifoOut;
-  procedure pull_01 (signal clk : in std_logic;  self : inout NativeFifoOut ; signal IO_data :  in NativeFifoOut_s2m);
-  procedure push_01 (signal clk : in std_logic;  self : inout NativeFifoOut ; signal IO_data :  out NativeFifoOut_m2s);
-  procedure pull_01 (signal clk : in std_logic;  self : inout NativeFifoOut ; signal IO_data :  in NativeFifoOut_m2s);
-  procedure push_01 (signal clk : in std_logic;  self : inout NativeFifoOut ; signal IO_data :  out NativeFifoOut_s2m);
-  procedure pull_11 (signal clk : in std_logic;  signal  self : inout NativeFifoOut ; signal IO_data :  in NativeFifoOut_s2m);
-  procedure push_11 (signal clk : in std_logic;  signal  self : inout NativeFifoOut ; signal IO_data :  out NativeFifoOut_m2s);
-  procedure pull_11 (signal clk : in std_logic;  signal  self : inout NativeFifoOut ; signal IO_data :  in NativeFifoOut_m2s);
-  procedure push_11 (signal clk : in std_logic;  signal  self : inout NativeFifoOut ; signal IO_data :  out NativeFifoOut_s2m);
+  procedure pull_01 (self : inout NativeFifoOut ; signal IO_data :  in NativeFifoOut_s2m);
+  procedure push_01 (self : inout NativeFifoOut ; signal IO_data :  out NativeFifoOut_m2s);
+  procedure pull_01 (self : inout NativeFifoOut ; signal IO_data :  out NativeFifoOut_m2s);
+  procedure push_01 (self : inout NativeFifoOut ; signal IO_data :  in NativeFifoOut_s2m);
+  procedure pull_11 (signal  self : inout NativeFifoOut ; signal IO_data :  in NativeFifoOut_s2m);
+  procedure push_11 (signal  self : inout NativeFifoOut ; signal IO_data :  out NativeFifoOut_m2s);
+  procedure pull_11 (signal  self : inout NativeFifoOut ; signal IO_data :  out NativeFifoOut_m2s);
+  procedure push_11 (signal  self : inout NativeFifoOut ; signal IO_data :  in NativeFifoOut_s2m);
 ------- End Psuedo Class NativeFifoOut -------------------------
 -------------------------------------------------------------------------
 
@@ -104,112 +104,64 @@ function NativeFifoOut_ctr  return NativeFifoOut is
  
 end function;
 
-procedure pull_01 (signal clk : in std_logic;  self : inout NativeFifoOut ; signal IO_data :  in NativeFifoOut_s2m) is
+procedure pull_01 (self : inout NativeFifoOut ; signal IO_data :  in NativeFifoOut_s2m) is
    
   begin 
+     pull_01(self.enable, IO_data.enable);
  
-
--- Start Connecting
-    pull_01(clk, self.enable, IO_data.enable);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure push_01 (signal clk : in std_logic;  self : inout NativeFifoOut ; signal IO_data :  out NativeFifoOut_m2s) is
+procedure push_01 (self : inout NativeFifoOut ; signal IO_data :  out NativeFifoOut_m2s) is
    
   begin 
+     push_01(self.data, IO_data.data);
+    push_01(self.empty, IO_data.empty);
  
-
--- Start Connecting
-    push_01(clk, self.data, IO_data.data);
-    push_01(clk, self.empty, IO_data.empty);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure pull_01 (signal clk : in std_logic;  self : inout NativeFifoOut ; signal IO_data :  in NativeFifoOut_m2s) is
+procedure pull_01 (self : inout NativeFifoOut ; signal IO_data :  out NativeFifoOut_m2s) is
    
   begin 
+     pull_01(self.data, IO_data.data);
+    pull_01(self.empty, IO_data.empty);
  
-
--- Start Connecting
-    pull_01(clk, self.data, IO_data.data);
-    pull_01(clk, self.empty, IO_data.empty);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure push_01 (signal clk : in std_logic;  self : inout NativeFifoOut ; signal IO_data :  out NativeFifoOut_s2m) is
+procedure push_01 (self : inout NativeFifoOut ; signal IO_data :  in NativeFifoOut_s2m) is
    
   begin 
+     push_01(self.enable, IO_data.enable);
  
-
--- Start Connecting
-    push_01(clk, self.enable, IO_data.enable);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure pull_11 (signal clk : in std_logic;  signal  self : inout NativeFifoOut ; signal IO_data :  in NativeFifoOut_s2m) is
+procedure pull_11 (signal  self : inout NativeFifoOut ; signal IO_data :  in NativeFifoOut_s2m) is
    
   begin 
+     pull_11(self.enable, IO_data.enable);
  
-
--- Start Connecting
-    pull_11(clk, self.enable, IO_data.enable);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure push_11 (signal clk : in std_logic;  signal  self : inout NativeFifoOut ; signal IO_data :  out NativeFifoOut_m2s) is
+procedure push_11 (signal  self : inout NativeFifoOut ; signal IO_data :  out NativeFifoOut_m2s) is
    
   begin 
+     push_11(self.data, IO_data.data);
+    push_11(self.empty, IO_data.empty);
  
-
--- Start Connecting
-    push_11(clk, self.data, IO_data.data);
-    push_11(clk, self.empty, IO_data.empty);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure pull_11 (signal clk : in std_logic;  signal  self : inout NativeFifoOut ; signal IO_data :  in NativeFifoOut_m2s) is
+procedure pull_11 (signal  self : inout NativeFifoOut ; signal IO_data :  out NativeFifoOut_m2s) is
    
   begin 
+     pull_11(self.data, IO_data.data);
+    pull_11(self.empty, IO_data.empty);
  
-
--- Start Connecting
-    pull_11(clk, self.data, IO_data.data);
-    pull_11(clk, self.empty, IO_data.empty);
-
--- End Connecting
-
-         
 end procedure;
 
-procedure push_11 (signal clk : in std_logic;  signal  self : inout NativeFifoOut ; signal IO_data :  out NativeFifoOut_s2m) is
+procedure push_11 (signal  self : inout NativeFifoOut ; signal IO_data :  in NativeFifoOut_s2m) is
    
   begin 
+     push_11(self.enable, IO_data.enable);
  
-
--- Start Connecting
-    push_11(clk, self.enable, IO_data.enable);
-
--- End Connecting
-
-         
 end procedure;
 
 ------- End Psuedo Class NativeFifoOut -------------------------

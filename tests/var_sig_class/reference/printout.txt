@@ -9,6 +9,9 @@
     <entity_conversion name="clk_generator">
       <status ="sucess">
     </entity_conversion>
+    <package_conversion name="v_symbol">
+      <status ="sucess">
+    </package_conversion>
     <entity_conversion name="var_sig_impl">
       <Missing_Template function="f1" args="Var_sig_class" />
       <Missing_Template function="f2" args="Var_sig_class, std_logic_vector(31 downto 0)" />

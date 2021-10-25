@@ -45,9 +45,10 @@ proc : process(clkgen_clk, ram_DataIO_s2m) is
     variable   data_out_opt : optional_t := optional_t_ctr;
   
   begin
-        pull( clk  =>  clkgen_clk, self  =>  ram_master, tx => ram_DataIO_s2m);
+        pull( self  =>  ram_master, tx => ram_DataIO_s2m);
   
   if rising_edge(clkgen_clk) then
+  
   data <= data + 10;
     adr <= adr + 1;
     
@@ -72,8 +73,10 @@ proc : process(clkgen_clk, ram_DataIO_s2m) is
         
       end if;
     
+    exit_rising_edge(self => ram_master);
+  
   end if;
-        push( clk  =>  clkgen_clk, self  =>  ram_master, tx => ram_DataIO_m2s);
+        push( self  =>  ram_master, tx => ram_DataIO_m2s);
   
   
   end process;

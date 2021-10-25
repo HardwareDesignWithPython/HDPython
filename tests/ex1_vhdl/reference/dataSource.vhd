@@ -34,9 +34,11 @@ proc : process(clk, DataOut_s2m) is
     variable   mast : axiStream_slv32_master := axiStream_slv32_master_ctr;
   
   begin
-        pull( clk  =>  clk, self  =>  mast, tx => DataOut_s2m);
+        pull( self  =>  mast, tx => DataOut_s2m);
   
   if rising_edge(clk) then
+    enter_rising_edge(self => mast);
+  
   
       if (ready_to_send_0(self => mast)) then 
         send_data_01(self => mast, dataIn => data);
@@ -44,8 +46,9 @@ proc : process(clk, DataOut_s2m) is
         
       end if;
     
+  
   end if;
-        push( clk  =>  clk, self  =>  mast, tx => DataOut_m2s);
+        push( self  =>  mast, tx => DataOut_m2s);
   
   
   end process;

@@ -31,10 +31,12 @@ end record;
 
 -- v_list getHeader
   function trigger_bits_buffer_t_sig_ctr  return trigger_bits_buffer_t_sig;
-  procedure pull (signal clk : in std_logic;  signal self_sig :  inout  trigger_bits_buffer_t_sig);
-  procedure push (signal clk : in std_logic;  signal self_sig :  inout  trigger_bits_buffer_t_sig);
-  procedure pull (signal clk  : in std_logic; signal self_sig :  inout  trigger_bits_buffer_t_sig_a);
-  procedure push (signal clk  : in std_logic; signal self_sig :  inout  trigger_bits_buffer_t_sig_a);
+-- empty procedure removed. name: 'pull'
+-- empty procedure removed. name: 'push'
+-- empty procedure removed. name: 'pull'
+-- empty procedure removed. name: 'push'
+-- empty procedure removed. name: 'enter_rising_edge'
+-- empty procedure removed. name: 'exit_rising_edge'
   function rising_edge_0 (
    Signal self_sig : trigger_bits_buffer_t_sig
  ) return boolean;
@@ -67,50 +69,12 @@ function trigger_bits_buffer_t_sig_ctr  return trigger_bits_buffer_t_sig is
  
 end function;
 
-procedure pull (signal clk : in std_logic;  signal self_sig :  inout  trigger_bits_buffer_t_sig) is
-   
-  begin 
- 
-
--- Start Connecting
-
--- End Connecting
-
-         
-end procedure;
-
-procedure push (signal clk : in std_logic;  signal self_sig :  inout  trigger_bits_buffer_t_sig) is
-   
-  begin 
- 
-
--- Start Connecting
-
--- End Connecting
-
-         
-end procedure;
-
-procedure pull (signal clk  : in std_logic; signal self_sig :  inout  trigger_bits_buffer_t_sig_a) is
-   
-  begin 
- 
-        for i in 0 to self'length - 1 loop
-        pull( clk => clk, self_sig =>  self_sig(i));
-        end loop;
-             
-end procedure;
-
-procedure push (signal clk  : in std_logic; signal self_sig :  inout  trigger_bits_buffer_t_sig_a) is
-   
-  begin 
- 
-        for i in 0 to self'length - 1 loop
-        push( clk => clk, self_sig =>  self_sig(i));
-        end loop;
-             
-end procedure;
-
+-- empty procedure removed. name: 'pull'
+-- empty procedure removed. name: 'push'
+-- empty procedure removed. name: 'pull'
+-- empty procedure removed. name: 'push'
+-- empty procedure removed. name: 'enter_rising_edge'
+-- empty procedure removed. name: 'exit_rising_edge'
 procedure push_back_11 (Signal self_sig :  inout  trigger_bits_buffer_t_sig; signal data_in :  in  std_logic_vector) is
    
   begin 

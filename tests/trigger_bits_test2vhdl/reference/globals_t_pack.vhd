@@ -33,10 +33,10 @@ end record;
         
 
   function globals_t_ctr  return globals_t;
-  procedure pull_01 (signal clk: in std_logic; self : inout globals_t; signal data_IO :  in  globals_t);
-  procedure push_01 (signal clk: in std_logic; self : inout globals_t; signal data_IO :  out  globals_t);
-  procedure pull_11 (signal clk: in std_logic;  signal self : inout globals_t; signal data_IO :  in  globals_t);
-  procedure push_11 (signal clk: in std_logic;  signal self : inout globals_t; signal data_IO :  out  globals_t);
+  procedure pull_01 (self : inout globals_t; signal data_IO :  in  globals_t);
+  procedure push_01 (self : inout globals_t; signal data_IO :  out  globals_t);
+  procedure pull_11 (signal self : inout globals_t; signal data_IO :  in  globals_t);
+  procedure push_11 (signal self : inout globals_t; signal data_IO :  out  globals_t);
 ------- End Psuedo Class globals_t -------------------------
 -------------------------------------------------------------------------
 
@@ -55,25 +55,25 @@ function globals_t_ctr  return globals_t is
  
 end function;
 
-procedure pull_01 (signal clk: in std_logic; self : inout globals_t; signal data_IO :  in  globals_t) is
+procedure pull_01 (self : inout globals_t; signal data_IO :  in  globals_t) is
    
   begin 
  self   :=  data_IO; 
 end procedure;
 
-procedure push_01 (signal clk: in std_logic; self : inout globals_t; signal data_IO :  out  globals_t) is
+procedure push_01 (self : inout globals_t; signal data_IO :  out  globals_t) is
    
   begin 
  data_IO  <=  self; 
 end procedure;
 
-procedure pull_11 (signal clk: in std_logic;  signal self : inout globals_t; signal data_IO :  in  globals_t) is
+procedure pull_11 (signal self : inout globals_t; signal data_IO :  in  globals_t) is
    
   begin 
  self   <=  data_IO; 
 end procedure;
 
-procedure push_11 (signal clk: in std_logic;  signal self : inout globals_t; signal data_IO :  out  globals_t) is
+procedure push_11 (signal self : inout globals_t; signal data_IO :  out  globals_t) is
    
   begin 
  data_IO  <=  self; 

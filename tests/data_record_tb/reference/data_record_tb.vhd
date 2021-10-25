@@ -41,6 +41,7 @@ proc : process(clkgen_clk) is
   begin
   
   if rising_edge(clkgen_clk) then
+  
   in_range <= '0';
     befor_range <= '0';
     after_range <= '0';
@@ -67,6 +68,7 @@ proc : process(clkgen_clk) is
         
       end if;
     
+  
   end if;
   
   

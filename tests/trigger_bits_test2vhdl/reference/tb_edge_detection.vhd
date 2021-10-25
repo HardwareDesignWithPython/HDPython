@@ -39,6 +39,7 @@ proc : process(gSystem.clk) is
   begin
   
   if rising_edge(gSystem.clk) then
+  
   TriggerBits_out.valid <= '0';
     for i3 in 0 to buff'length -1 loop 
         TriggerBits_out.TriggerBits(i3) <= (others => '0');
@@ -52,6 +53,7 @@ proc : process(gSystem.clk) is
         end if;
       end loop;
     
+  
   end if;
   
   

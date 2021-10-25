@@ -51,10 +51,10 @@ end record;
     var5 : integer := 5 ;
     var6 : integer := 6
  ) return test_Config;
-  procedure pull_01 (signal clk: in std_logic; self : inout test_Config; signal data_IO :  in  test_Config);
-  procedure push_01 (signal clk: in std_logic; self : inout test_Config; signal data_IO :  out  test_Config);
-  procedure pull_11 (signal clk: in std_logic;  signal self : inout test_Config; signal data_IO :  in  test_Config);
-  procedure push_11 (signal clk: in std_logic;  signal self : inout test_Config; signal data_IO :  out  test_Config);
+  procedure pull_01 (self : inout test_Config; signal data_IO :  in  test_Config);
+  procedure push_01 (self : inout test_Config; signal data_IO :  out  test_Config);
+  procedure pull_11 (signal self : inout test_Config; signal data_IO :  in  test_Config);
+  procedure push_11 (signal self : inout test_Config; signal data_IO :  out  test_Config);
 ------- End Psuedo Class test_Config -------------------------
 -------------------------------------------------------------------------
 
@@ -94,25 +94,25 @@ function test_Config_ctr (
  
 end function;
 
-procedure pull_01 (signal clk: in std_logic; self : inout test_Config; signal data_IO :  in  test_Config) is
+procedure pull_01 (self : inout test_Config; signal data_IO :  in  test_Config) is
    
   begin 
  self   :=  data_IO; 
 end procedure;
 
-procedure push_01 (signal clk: in std_logic; self : inout test_Config; signal data_IO :  out  test_Config) is
+procedure push_01 (self : inout test_Config; signal data_IO :  out  test_Config) is
    
   begin 
  data_IO  <=  self; 
 end procedure;
 
-procedure pull_11 (signal clk: in std_logic;  signal self : inout test_Config; signal data_IO :  in  test_Config) is
+procedure pull_11 (signal self : inout test_Config; signal data_IO :  in  test_Config) is
    
   begin 
  self   <=  data_IO; 
 end procedure;
 
-procedure push_11 (signal clk: in std_logic;  signal self : inout test_Config; signal data_IO :  out  test_Config) is
+procedure push_11 (signal self : inout test_Config; signal data_IO :  out  test_Config) is
    
   begin 
  data_IO  <=  self; 
